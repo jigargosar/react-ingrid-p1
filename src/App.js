@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from 'react'
 import * as R from 'ramda'
+import validate from 'aproba'
 
 function useEffects(setState) {
   return useMemo(
@@ -12,21 +13,31 @@ function useEffects(setState) {
   )
 }
 
+function rootNode(model) {
+  validate('O', arguments)
+  return model.byId[model.rootId]
+}
+
 function Node({ node }) {
   return <div className="">{node.title}</div>
 }
 
 function App() {
-  const [model, setModel] = useState(() => ({
-    root: { title: 'Root', children: [] },
-  }))
+  const [model, setModel] = useState(() => {
+    const rootId = 'n_root'
+    const root = { id: rootId, title: 'Root', childIds: [] }
+    return {
+      rootId,
+      byId: { [root.id]: root },
+    }
+  })
 
   const effects = useEffects(setModel)
 
   return (
     <div className="">
       <div className="" onClick={effects.log}>
-        <Node node={model.root} />
+        <Node node={rootNode(model)} />
       </div>
     </div>
   )
