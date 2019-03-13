@@ -1,6 +1,7 @@
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import * as R from 'ramda'
 import validate from 'aproba'
+import { getCached, setCache } from './cache-helpers'
 
 function useEffects(setState) {
   return useMemo(
@@ -24,17 +25,31 @@ function Node({ node }) {
   return <div className="">{node.title}</div>
 }
 
-function App() {
+function useAppModel() {
   const [model, setModel] = useState(() => {
     const rootId = 'n_root'
     const root = { id: rootId, title: 'Root', childIds: [] }
-    return {
-      rootId,
-      byId: { [root.id]: root },
-    }
+
+    const def = { byId: { [root.id]: root }, rootId }
+
+    return R.compose(
+      // R.tap(console.log),
+      R.mergeDeepRight(def),
+      R.defaultTo({}),
+      getCached,
+    )('app-model')
   })
 
+  useEffect(() => {
+    setCache('app-model', model)
+  }, [model])
+
   const effects = useEffects(setModel)
+  return [model, effects]
+}
+
+function App() {
+  const [model, effects] = useAppModel()
 
   return (
     <div className="">
