@@ -1,6 +1,6 @@
 import validate from 'aproba'
 import * as R from 'ramda'
-import * as tree from './tree'
+import * as Tree from './tree'
 
 export function singleton(tree) {
   validate('O', arguments)
@@ -39,8 +39,8 @@ export function parent(z) {
     return {
       left: crumb.left,
       center: R.compose(
-        tree.replaceChildren([...z.left, z.center, ...z.right]),
-        tree.fromDatum,
+        Tree.replaceChildren([...z.left, z.center, ...z.right]),
+        Tree.fromDatum,
       )(crumb.datum),
       right: crumb.right,
       crumbs: R.tail(z.crumbs),
@@ -54,12 +54,17 @@ export function root(z) {
   return parent_ ? root(parent_) : z
 }
 
+export function tree(z) {
+  validate('O', arguments)
+  return z.center
+}
+
 R.compose(
   R.tap(console.log),
   root,
   parent,
-  appendGoR(tree.fromDatum('2nd child of foo')),
-  appendChildGoR(tree.fromDatum('1st child of foo')),
+  appendGoR(Tree.fromDatum('2nd child of foo')),
+  appendChildGoR(Tree.fromDatum('1st child of foo')),
   singleton,
-  tree.fromDatum,
+  Tree.fromDatum,
 )('foo')

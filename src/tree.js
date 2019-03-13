@@ -18,3 +18,12 @@ export const replaceChildren = R.curry(function replaceChildren(
   validate('AO', arguments)
   return R.assoc('children')(newChildren)(t)
 })
+
+export function datum(t) {
+  validate('O', arguments)
+  return t.datum
+}
+export function children(t) {
+  validate('O', arguments)
+  return t.children
+}
