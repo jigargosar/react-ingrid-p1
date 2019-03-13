@@ -175,13 +175,3 @@ export const withRollback = R.curry(function withRollback(opFn, z) {
   const nz = opFn(z)
   return nz ? nz : z
 })
-
-compose(
-  R.tap(console.log),
-  root,
-  parent,
-  appendGoR(Tree.fromDatum('2nd child of foo')),
-  appendChildGoR(Tree.fromDatum('1st child of foo')),
-  singleton,
-  Tree.fromDatum,
-)('foo')
