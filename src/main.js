@@ -5,24 +5,25 @@ import validate from 'aproba'
 import nanoid from 'nanoid'
 import faker from 'faker'
 
+function appendChild(parentId) {
+  const node = {
+    id: `n_${nanoid()}`,
+    title: faker.name.lastName(),
+    childIds: [],
+  }
+  return R.compose(
+    R.assocPath(['byId', node.id])(node),
+    R.over(R.lensPath(['byId', parentId, 'childIds']), R.append(node.id)),
+  )
+}
+
 function useEffects(setModel) {
   return useMemo(
     () => ({
       log: msg => console.log(msg),
       newLine: parentId =>
         setModel(model => {
-          const node = {
-            id: `n_${nanoid()}`,
-            title: faker.name.lastName(),
-            childIds: [],
-          }
-          return R.compose(
-            R.assocPath(['byId', node.id])(node),
-            R.over(
-              R.lensPath(['byId', parentId, 'childIds']),
-              R.append(node.id),
-            ),
-          )(model)
+          return appendChild(parentId)(model)
         }),
     }),
     [],
