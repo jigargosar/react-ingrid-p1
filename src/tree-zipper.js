@@ -94,11 +94,6 @@ export function nextSibling(z) {
     : null
 }
 
-const orElseLazy = R.curry(function orElse(thunk, nullable) {
-  validate('F*', arguments)
-  return R.when(R.isNil, thunk, nullable)
-})
-
 export function firstChild(z) {
   validate('O', arguments)
   const children = Tree.children(z.center)
@@ -133,11 +128,13 @@ export function lastChild(z) {
   }
 }
 
+const whenNil = thunk => when(isNil, thunk)
+
 export function next(z) {
   validate('O', arguments)
   return compose(
-    orElseLazy(() => nextSiblingOfFirstAncestor(z)),
-    orElseLazy(() => nextSibling(z)),
+    whenNil(() => nextSiblingOfFirstAncestor(z)),
+    whenNil(() => nextSibling(z)),
     firstChild,
   )(z)
 }
