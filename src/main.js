@@ -30,9 +30,14 @@ function useEffects(setModel) {
           title: faker.name.lastName(),
           childIds: [],
         }
+        const tree = Tree.fromDatum(node)
         return setModel(
           R.over(R.lensPath(['zipper']))(
-            Zipper.appendChildGoR(Tree.fromDatum(node)),
+            R.ifElse(
+              z => Zipper.root(z) === z,
+              Zipper.appendChildGoR(tree),
+              Zipper.appendGoR(tree),
+            ),
           ),
         )
       },
