@@ -39,7 +39,7 @@ function RootTree({ model, effects }) {
     validate('O', arguments)
     return (
       <div
-        className="pa3"
+        className="pa2"
         tabIndex={0}
         onClick={() => effects.appendChild(node.id)}
       >
@@ -53,7 +53,11 @@ function RootTree({ model, effects }) {
     const node = nodeById(id, model)
     return (
       <>
-        {<div style={{ paddingLeft: level * 8 }}>{renderTitle(node)}</div>}
+        {
+          <div style={{ paddingLeft: `${level * 1.5}rem` }}>
+            {renderTitle(node)}
+          </div>
+        }
         {node.childIds.map(id => renderNodeTree(level + 1, id))}
       </>
     )
