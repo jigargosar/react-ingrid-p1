@@ -12,17 +12,21 @@ function useEffects(setState) {
   )
 }
 
+function Node({ node }) {
+  return <div className="">{node.title}</div>
+}
+
 function App() {
-  const [model, setState] = useState(() => ({
+  const [model, setModel] = useState(() => ({
     root: { title: 'Root', children: [] },
   }))
 
-  const effects = useEffects(setState)
+  const effects = useEffects(setModel)
 
   return (
     <div className="">
       <div className="" onClick={effects.log}>
-        {model.root.title}
+        <Node node={model.root} />
       </div>
     </div>
   )
