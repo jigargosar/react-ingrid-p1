@@ -12,7 +12,7 @@ function useEffects(setModel) {
         setModel(state => R.assocPath(['root', 'title'])('Root1')(state)),
 
       appendChild: () =>
-        setModel(
+        setModel(model =>
           R.over(
             R.lensPath(['root', 'children']),
             R.append({
@@ -20,7 +20,7 @@ function useEffects(setModel) {
               title: 'foo',
               children: [],
             }),
-          ),
+          )(model),
         ),
     }),
     [],
@@ -29,15 +29,20 @@ function useEffects(setModel) {
 
 export function rootNode(model) {
   validate('O', arguments)
-  return R.prop('root')(model)
+  return R.path(['byId', model.rootId])(model)
 }
 
 export function useAppModel() {
   const [model, setModel] = useState(() => {
     const rootId = 'n_root'
-    const root = { id: rootId, title: 'Root', children: [] }
+    const root = {
+      id: rootId,
+      title: 'Root',
+      children: [],
+      cursor: [rootId],
+    }
 
-    const def = { root }
+    const def = { root, byId: { [root.id]: root }, rootId }
 
     return R.compose(
       // R.tap(console.log),
