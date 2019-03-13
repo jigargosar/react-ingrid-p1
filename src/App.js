@@ -23,9 +23,11 @@ function Node({ node }) {
   return (
     <div className="">
       <NodeTitle title={node.title} />
-      <div className="pa3">
-        <div className="pl3">Children</div>
-        <NodeList nodes={node.children} />
+      <div className="pl3">
+        <div className="pl3">
+          Children
+          <NodeList nodes={node.children} />
+        </div>
       </div>
     </div>
   )
