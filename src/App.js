@@ -1,5 +1,5 @@
 import React from 'react'
-import { rootNode, useAppModel } from './main'
+import { childNodes, rootNode, useAppModel } from './main'
 
 function NodeTitle({ title, effects, id }) {
   return (
@@ -13,23 +13,27 @@ function NodeTitle({ title, effects, id }) {
   )
 }
 
-function NodeList({ nodes, effects }) {
+function NodeList({ model, nodes, effects }) {
   return (
     <>
       {nodes.map(node => (
-        <Node key={node.id} node={node} effects={effects} />
+        <Node key={node.id} model={model} node={node} effects={effects} />
       ))}
     </>
   )
 }
 
-function Node({ node, effects }) {
+function Node({ model, node, effects }) {
   return (
     <div className="">
       <NodeTitle title={node.title} effects={effects} id={node.id} />
       <div className="pl3">
         <div className="pl3">
-          <NodeList nodes={node.children} effects={effects} />
+          <NodeList
+            nodes={childNodes(node.id, model)}
+            model={model}
+            effects={effects}
+          />
         </div>
       </div>
     </div>
@@ -42,7 +46,7 @@ function App() {
   return (
     <div className="">
       <div className="" onClick={() => effects.setRootLabel()}>
-        <Node node={rootNode(model)} effects={effects} />
+        <Node node={rootNode(model)} model={model} effects={effects} />
       </div>
     </div>
   )

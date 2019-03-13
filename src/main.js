@@ -18,7 +18,7 @@ function useEffects(setModel) {
             R.append({
               id: `n_${nanoid()}`,
               title: 'foo',
-              children: [],
+              childIds: [],
             }),
           )(model),
         ),
@@ -32,18 +32,32 @@ export function rootNode(model) {
   return R.path(['byId', model.rootId])(model)
 }
 
+function childIds(id, model) {
+  validate('SO', arguments)
+  return R.path(['byId', id, 'childIds'])(model)
+}
+
+function nodeById(id, model) {
+  validate('SO', arguments)
+  return R.path(['byId', id])(model)
+}
+
+export function childNodes(id, model) {
+  validate('SO', arguments)
+  const ids = childIds(id, model)
+  return R.map(id => nodeById(id, model))(ids)
+}
+
 export function useAppModel() {
   const [model, setModel] = useState(() => {
     const rootId = 'n_root'
     const root = {
       id: rootId,
       title: 'Root',
-      children: [],
-      cursor: [rootId],
+      childIds: [],
     }
 
     const def = {
-      root,
       byId: { [root.id]: root },
       rootId,
       selectedId: root.id,
