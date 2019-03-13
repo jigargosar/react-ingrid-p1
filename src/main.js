@@ -2,14 +2,25 @@ import { useEffect, useMemo, useState } from 'react'
 import * as R from 'ramda'
 import { getCached, setCache } from './cache-helpers'
 import validate from 'aproba'
+import nanoid from 'nanoid'
 
-function useEffects(setState) {
+function useEffects(setModel) {
   return useMemo(
     () => ({
       log: msg => console.log(msg),
       setRootLabel: () =>
-        setState(state =>
-          R.assocPath(['byId', state.rootId, 'title'])('Root1')(state),
+        setModel(state => R.assocPath(['root', 'title'])('Root1')(state)),
+
+      appendChild: () =>
+        setModel(
+          R.over(
+            R.lensPath(['root', 'children']),
+            R.append({
+              id: `n_${nanoid()}`,
+              title: 'foo',
+              children: [],
+            }),
+          ),
         ),
     }),
     [],
@@ -18,7 +29,7 @@ function useEffects(setState) {
 
 export function rootNode(model) {
   validate('O', arguments)
-  return model.byId[model.rootId]
+  return R.prop('root')(model)
 }
 
 export function useAppModel() {
@@ -26,7 +37,7 @@ export function useAppModel() {
     const rootId = 'n_root'
     const root = { id: rootId, title: 'Root', children: [] }
 
-    const def = { byId: { [root.id]: root }, rootId }
+    const def = { root }
 
     return R.compose(
       // R.tap(console.log),

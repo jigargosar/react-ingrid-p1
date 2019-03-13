@@ -1,32 +1,31 @@
 import React from 'react'
 import { rootNode, useAppModel } from './main'
 
-function NodeTitle({ title }) {
+function NodeTitle({ title, effects }) {
   return (
-    <div className="pa3" tabIndex={0}>
+    <div className="pa3" tabIndex={0} onClick={effects.appendChild}>
       {title}
     </div>
   )
 }
 
-function NodeList({ nodes }) {
+function NodeList({ nodes, effects }) {
   return (
     <>
-      {nodes.forEach(node => (
-        <Node key={node.id} node={node} />
+      {nodes.map(node => (
+        <Node key={node.id} node={node} effects={effects} />
       ))}
     </>
   )
 }
 
-function Node({ node }) {
+function Node({ node, effects }) {
   return (
     <div className="">
-      <NodeTitle title={node.title} />
+      <NodeTitle title={node.title} effects={effects} />
       <div className="pl3">
         <div className="pl3">
-          Children
-          <NodeList nodes={node.children} />
+          <NodeList nodes={node.children} effects={effects} />
         </div>
       </div>
     </div>
@@ -39,7 +38,7 @@ function App() {
   return (
     <div className="">
       <div className="" onClick={() => effects.setRootLabel()}>
-        <Node node={rootNode(model)} />
+        <Node node={rootNode(model)} effects={effects} />
       </div>
     </div>
   )
