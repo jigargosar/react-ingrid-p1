@@ -21,10 +21,7 @@ function useEffects(setModel) {
   return useMemo(
     () => ({
       log: msg => console.log(msg),
-      newLine: parentId =>
-        setModel(model => {
-          return appendChild(parentId)(model)
-        }),
+      newLine: parentId => setModel(model => appendChild(parentId)(model)),
     }),
     [],
   )
