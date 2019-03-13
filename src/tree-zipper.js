@@ -70,13 +70,27 @@ export function datum(z) {
 export function prevSibling(z) {
   validate('O', arguments)
   const ps = R.last(z.left)
-  return ps ? { ...z, left: R.init(z.left), center: ps } : null
+  return ps
+    ? {
+        ...z,
+        left: R.init(z.left),
+        center: ps,
+        right: R.prepend(z.center)(z.right),
+      }
+    : null
 }
 
 export function nextSibling(z) {
   validate('O', arguments)
   const ns = R.head(z.right)
-  return ns ? { ...z, center: ns, right: R.tail(z.right) } : null
+  return ns
+    ? {
+        ...z,
+        left: R.append(z.center)(z.left),
+        center: ns,
+        right: R.tail(z.right),
+      }
+    : null
 }
 
 export const withRollback = R.curry(function withRollback(opFn, z) {
