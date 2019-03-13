@@ -6,6 +6,7 @@ import nanoid from 'nanoid'
 import faker from 'faker'
 import * as Tree from './tree'
 import * as Zipper from './tree-zipper'
+import isHotKey from 'is-hotkey'
 
 function appendChild(parentId) {
   const node = {
@@ -19,11 +20,20 @@ function appendChild(parentId) {
   )
 }
 
+const zipperL = R.lensPath(['zipper'])
+const overZipper = R.over(zipperL)
+
 function useEffects(setModel) {
   return useMemo(
     () => ({
       log: msg => console.log(msg),
       newLine: parentId => setModel(model => appendChild(parentId)(model)),
+      next() {
+        setModel(overZipper(Zipper.withRollback(Zipper.nextSibling)))
+      },
+      prev() {
+        setModel(overZipper(Zipper.withRollback(Zipper.prevSibling)))
+      },
       newLineZ: () => {
         const node = {
           id: `n_${nanoid()}`,
@@ -31,8 +41,9 @@ function useEffects(setModel) {
           childIds: [],
         }
         const tree = Tree.fromDatum(node)
+
         return setModel(
-          R.over(R.lensPath(['zipper']))(
+          overZipper(
             R.ifElse(
               z => Zipper.root(z) === z,
               Zipper.appendChildGoR(tree),
@@ -82,6 +93,18 @@ export function useAppModel() {
     function listener(e) {
       validate('O', arguments)
       console.log(`e`, e)
+      if (isHotKey('down')(e)) {
+        e.preventDefault()
+        effects.next()
+      }
+      if (isHotKey('up')(e)) {
+        e.preventDefault()
+        effects.prev()
+      }
+      if (isHotKey('enter')(e)) {
+        e.preventDefault()
+        effects.newLineZ()
+      }
     }
     window.addEventListener('keydown', listener)
     return () => window.removeEventListener('keydown', listener)

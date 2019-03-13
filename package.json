@@ -5,6 +5,7 @@
   "dependencies": {
     "aproba": "latest",
     "faker": "^4.1.0",
+    "is-hotkey": "^0.1.4",
     "nanoid": "^2.0.1",
     "ramda": "^0.26.1",
     "react": "^16.8.4",
