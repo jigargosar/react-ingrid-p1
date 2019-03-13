@@ -98,11 +98,6 @@ const orElseLazy = R.curry(function orElse(thunk, nullable) {
   return R.when(R.isNil, thunk, nullable)
 })
 
-// const maybeMap = R.curry(function maybeMap(fn, val) {
-//   validate('F*', arguments)
-//   return R.unless(R.isNil, fn, val)
-// })
-
 export function firstChild(z) {
   validate('O', arguments)
   const children = Tree.children(z.center)
