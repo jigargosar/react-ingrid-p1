@@ -46,24 +46,16 @@ function useEffects(setModel) {
   )
 }
 
-export function nodeById(id, model) {
-  validate('SO', arguments)
-  return R.path(['byId', id])(model)
-}
-
 export function useAppModel() {
   const [model, setModel] = useState(() => {
-    const rootId = 'n_root'
     const root = {
-      id: rootId,
+      id: 'n_root',
       title: 'Root',
       childIds: [],
       collapsed: false,
     }
 
     const def = {
-      byId: { [root.id]: root },
-      rootId,
       zipper: Zipper.singleton(Tree.fromDatum(root)),
     }
 
