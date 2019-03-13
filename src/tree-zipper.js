@@ -1,5 +1,6 @@
 import validate from 'aproba'
 import * as R from 'ramda'
+import { compose, ifElse, isNil, when } from 'ramda'
 import * as Tree from './tree'
 
 export function singleton(tree) {
@@ -38,7 +39,7 @@ export function parent(z) {
     const crumb = R.head(z.crumbs)
     return {
       left: crumb.left,
-      center: R.compose(
+      center: compose(
         Tree.replaceChildren([...z.left, z.center, ...z.right]),
         Tree.fromDatum,
       )(crumb.datum),
@@ -61,7 +62,7 @@ export function tree(z) {
 
 export function datum(z) {
   validate('O', arguments)
-  return R.compose(
+  return compose(
     Tree.datum,
     tree,
   )(z)
@@ -98,6 +99,10 @@ const orElseLazy = R.curry(function orElse(thunk, nullable) {
   return R.when(R.isNil, thunk, nullable)
 })
 
+const andThen = R.curry(function andThen(fn, nullable) {
+  return nullable ? fn(nullable) : nullable
+})
+
 export function firstChild(z) {
   validate('O', arguments)
   const children = Tree.children(z.center)
@@ -115,37 +120,54 @@ export function firstChild(z) {
   }
 }
 
+export function lastChild(z) {
+  validate('O', arguments)
+  const children = Tree.children(z.center)
+  if (R.isEmpty(children)) return
+
+  return {
+    left: R.init(children),
+    center: R.last(children),
+    right: [],
+    crumbs: R.prepend({
+      left: z.left,
+      datum: z.center.datum,
+      right: z.right,
+    })(z.crumbs),
+  }
+}
+
 export function next(z) {
   validate('O', arguments)
-  return R.compose(
-    orElseLazy(() => nextSiblingOfParent(z)),
+  return compose(
+    orElseLazy(() => nextSiblingOfFirstAncestor(z)),
     orElseLazy(() => nextSibling(z)),
     firstChild,
   )(z)
 }
 
-function nextSiblingOfParent(z) {
+function nextSiblingOfFirstAncestor(z) {
   validate('O', arguments)
-  if (root(z) === z) return null
-  return R.compose(
-    pz =>
-      pz
-        ? R.compose(
-            orElseLazy(() => nextSiblingOfParent(pz)),
-            nextSibling,
-          )(pz)
-        : null,
-    parent,
-  )(z)
+  const pz = parent(z)
+  if (!pz || pz === root(z)) return null
+
+  return when(isNil, () => nextSiblingOfFirstAncestor(pz))(nextSibling(pz))
 }
 
 export function prev(z) {
   validate('O', arguments)
   if (root(z) === z) return null
-  return R.compose(
-    orElseLazy(() => parent(z)),
+  return compose(
+    ifElse(isNil, () => parent(z), lastDescendent),
     prevSibling,
   )(z)
+}
+
+function lastDescendent(z) {
+  validate('O', arguments)
+
+  const lc = lastChild(z)
+  return lc ? lastDescendent(lc) : z
 }
 
 export const withRollback = R.curry(function withRollback(opFn, z) {
@@ -154,7 +176,7 @@ export const withRollback = R.curry(function withRollback(opFn, z) {
   return nz ? nz : z
 })
 
-R.compose(
+compose(
   R.tap(console.log),
   root,
   parent,
