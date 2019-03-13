@@ -7,7 +7,9 @@ function useEffects(setState) {
     () => ({
       log: msg => console.log(msg),
       setRootLabel: () =>
-        setState(R.assocPath(['root', 'title'])('Root1')),
+        setState(state =>
+          R.assocPath(['byId', state.rootId, 'title'])('Root1')(state),
+        ),
     }),
     [],
   )
@@ -36,7 +38,7 @@ function App() {
 
   return (
     <div className="">
-      <div className="" onClick={effects.log}>
+      <div className="" onClick={() => effects.setRootLabel()}>
         <Node node={rootNode(model)} />
       </div>
     </div>
