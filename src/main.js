@@ -4,6 +4,7 @@ import { getCached, setCache } from './cache-helpers'
 import validate from 'aproba'
 import nanoid from 'nanoid'
 import faker from 'faker'
+import * as tree from './tree'
 
 function appendChild(parentId) {
   const node = {
@@ -45,6 +46,7 @@ export function useAppModel() {
       byId: { [root.id]: root },
       rootId,
       selectedId: root.id,
+      zipper: tree.fromDatum(root),
     }
 
     return R.compose(
