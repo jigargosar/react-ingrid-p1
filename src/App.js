@@ -2,7 +2,11 @@ import React from 'react'
 import { rootNode, useAppModel } from './main'
 
 function NodeTitle({ title }) {
-  return <div className="pa3">{title}</div>
+  return (
+    <div className="pa3" tabIndex={0}>
+      {title}
+    </div>
+  )
 }
 
 function NodeList({ nodes }) {
