@@ -46,7 +46,6 @@ export function useAppModel() {
     const def = {
       byId: { [root.id]: root },
       rootId,
-      selectedId: root.id,
       zipper: zipper.singleton(tree.fromDatum(root)),
     }
 
