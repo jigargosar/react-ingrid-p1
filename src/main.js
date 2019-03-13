@@ -11,10 +11,10 @@ function useEffects(setModel) {
       setRootLabel: () =>
         setModel(state => R.assocPath(['root', 'title'])('Root1')(state)),
 
-      appendChild: () =>
+      appendChild: parentId =>
         setModel(model =>
           R.over(
-            R.lensPath(['root', 'children']),
+            R.lensPath(['byId', parentId, 'children']),
             R.append({
               id: `n_${nanoid()}`,
               title: 'foo',
@@ -42,7 +42,12 @@ export function useAppModel() {
       cursor: [rootId],
     }
 
-    const def = { root, byId: { [root.id]: root }, rootId }
+    const def = {
+      root,
+      byId: { [root.id]: root },
+      rootId,
+      selectedId: root.id,
+    }
 
     return R.compose(
       // R.tap(console.log),
