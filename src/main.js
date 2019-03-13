@@ -22,6 +22,12 @@ function useEffects(setModel) {
       prev() {
         setModel(overZipper(Zipper.withRollback(Zipper.prev)))
       },
+      collapseOrPrev() {
+        setModel(overZipper(Zipper.mapDatum(R.assoc('collapsed', true))))
+      },
+      expandOrNext() {
+        setModel(overZipper(Zipper.mapDatum(R.assoc('collapsed', false))))
+      },
       newLineZ: () => {
         const node = {
           id: `n_${nanoid()}`,
@@ -82,6 +88,14 @@ export function useAppModel() {
       if (isHotKey('up')(e)) {
         e.preventDefault()
         effects.prev()
+      }
+      if (isHotKey('left')(e)) {
+        e.preventDefault()
+        effects.collapseOrPrev()
+      }
+      if (isHotKey('right')(e)) {
+        e.preventDefault()
+        effects.expandOrNext()
       }
       if (isHotKey('enter')(e)) {
         e.preventDefault()

@@ -1,6 +1,6 @@
 import validate from 'aproba'
 import * as R from 'ramda'
-import { compose, ifElse, isNil, when } from 'ramda'
+import { compose, curry, ifElse, isNil, when } from 'ramda'
 import * as Tree from './tree'
 
 export function singleton(tree) {
@@ -167,4 +167,9 @@ export const withRollback = R.curry(function withRollback(opFn, z) {
   validate('FO', arguments)
   const nz = opFn(z)
   return nz ? nz : z
+})
+
+export const mapDatum = curry(function mapDatum(fn, z) {
+  validate('FO', arguments)
+  return { ...z, center: Tree.mapDatum(fn, z.center) }
 })

@@ -1,5 +1,6 @@
 import validate from 'aproba'
 import * as R from 'ramda'
+import { curry, lensPath, over } from 'ramda'
 
 export function fromDatum(datum) {
   validate('*', arguments)
@@ -27,3 +28,10 @@ export function children(t) {
   validate('O', arguments)
   return t.children
 }
+
+const overDatum = over(lensPath(['datum']))
+
+export const mapDatum = curry(function mapDatum(fn, t) {
+  validate('FO', arguments)
+  return overDatum(fn)(t)
+})
