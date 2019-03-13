@@ -128,7 +128,7 @@ export function lastChild(z) {
   }
 }
 
-const whenNil = thunk => when(isNil, thunk)
+const whenNil = when(isNil)
 
 export function next(z) {
   validate('O', arguments)
