@@ -17,7 +17,7 @@ function RootZipper({ model, effects }) {
     return (
       <div
         className={`pa2 ${isSelected ? 'bg-light-blue white' : ''}`}
-        tabIndex={isSelected ? 0 : null}
+        // tabIndex={isSelected ? 0 : null}
         // onClick={() => effects.newLineZ(node.id)}
       >
         {node.title}
