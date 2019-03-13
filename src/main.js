@@ -78,6 +78,15 @@ export function useAppModel() {
     setCache('app-model', model)
   }, [model])
 
+  useEffect(() => {
+    function listener(e) {
+      validate('O', arguments)
+      console.log(`e`, e)
+    }
+    window.addEventListener('keydown', listener)
+    return () => window.removeEventListener('keydown', listener)
+  }, [])
+
   const effects = useEffects(setModel)
   return [model, effects]
 }
