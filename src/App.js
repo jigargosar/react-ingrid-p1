@@ -5,34 +5,6 @@ import * as Zipper from './tree-zipper'
 import * as Tree from './tree'
 import * as R from 'ramda'
 
-// function RootTree({ model, effects }) {
-//   function renderTitle(node) {
-//     validate('O', arguments)
-//     return (
-//       <div
-//         className="pa2"
-//         tabIndex={0}
-//         onClick={() => effects.newLine(node.id)}
-//       >
-//         {node.title}
-//       </div>
-//     )
-//   }
-//
-//   function renderNodeTree(level, id) {
-//     validate('NS', arguments)
-//     const node = nodeById(id, model)
-//     return [
-//       <div key={id} style={{ paddingLeft: `${level * 1.5}rem` }}>
-//         {renderTitle(node)}
-//       </div>,
-//       ...node.childIds.map(cid => renderNodeTree(level + 1, cid)),
-//     ]
-//   }
-//
-//   return renderNodeTree(0, model.rootId)
-// }
-
 function RootZipper({ model, effects }) {
   const selectedId = R.compose(
     R.prop('id'),

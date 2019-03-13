@@ -8,18 +8,6 @@ import * as Tree from './tree'
 import * as Zipper from './tree-zipper'
 import isHotKey from 'is-hotkey'
 
-function appendChild(parentId) {
-  const node = {
-    id: `n_${nanoid()}`,
-    title: faker.name.lastName(),
-    childIds: [],
-  }
-  return R.compose(
-    R.assocPath(['byId', node.id])(node),
-    R.over(R.lensPath(['byId', parentId, 'childIds']), R.append(node.id)),
-  )
-}
-
 const zipperL = R.lensPath(['zipper'])
 const overZipper = R.over(zipperL)
 
@@ -27,7 +15,7 @@ function useEffects(setModel) {
   return useMemo(
     () => ({
       log: msg => console.log(msg),
-      newLine: parentId => setModel(model => appendChild(parentId)(model)),
+
       next() {
         setModel(overZipper(Zipper.withRollback(Zipper.next)))
       },
