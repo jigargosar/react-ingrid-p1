@@ -26,6 +26,7 @@ function useEffects(setModel) {
         const node = {
           id: `n_${nanoid()}`,
           title: faker.name.lastName(),
+          collapsed: false,
           childIds: [],
         }
         const tree = Tree.fromDatum(node)
@@ -57,6 +58,7 @@ export function useAppModel() {
       id: rootId,
       title: 'Root',
       childIds: [],
+      collapsed: false,
     }
 
     const def = {
