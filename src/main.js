@@ -5,6 +5,7 @@ import validate from 'aproba'
 import nanoid from 'nanoid'
 import faker from 'faker'
 import * as tree from './tree'
+import * as zipper from './tree-zipper'
 
 function appendChild(parentId) {
   const node = {
@@ -46,7 +47,7 @@ export function useAppModel() {
       byId: { [root.id]: root },
       rootId,
       selectedId: root.id,
-      zipper: tree.fromDatum(root),
+      zipper: zipper.singleton(tree.fromDatum(root)),
     }
 
     return R.compose(

@@ -7,7 +7,16 @@ export function singleton(tree) {
   return { left: [], center: tree, right: [], crumbs: [] }
 }
 
-export function appendChildGoR(child, z) {
+export const appendGoR = R.curry(function appendGoR(tree, z) {
+  validate('OO', arguments)
+  return {
+    ...z,
+    left: R.append(z.center)(z.left),
+    center: tree,
+  }
+})
+
+export const appendChildGoR = R.curry(function appendChildGoR(child, z) {
   validate('OO', arguments)
   return {
     left: z.center.children,
@@ -19,7 +28,7 @@ export function appendChildGoR(child, z) {
       right: z.right,
     })(z.crumbs),
   }
-}
+})
 
 export function parent(z) {
   validate('O', arguments)
@@ -44,3 +53,13 @@ export function root(z) {
   const parent_ = parent(z)
   return parent_ ? root(parent_) : z
 }
+
+R.compose(
+  R.tap(console.log),
+  root,
+  parent,
+  appendGoR(tree.fromDatum('2nd child of foo')),
+  appendChildGoR(tree.fromDatum('1st child of foo')),
+  singleton,
+  tree.fromDatum,
+)('foo')
