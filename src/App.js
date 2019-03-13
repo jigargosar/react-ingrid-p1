@@ -51,16 +51,12 @@ function RootTree({ model, effects }) {
   function renderNodeTree(level, id) {
     validate('NS', arguments)
     const node = nodeById(id, model)
-    return (
-      <>
-        {
-          <div style={{ paddingLeft: `${level * 1.5}rem` }}>
-            {renderTitle(node)}
-          </div>
-        }
-        {node.childIds.map(id => renderNodeTree(level + 1, id))}
-      </>
-    )
+    return [
+      <div key={id} style={{ paddingLeft: `${level * 1.5}rem` }}>
+        {renderTitle(node)}
+      </div>,
+      ...node.childIds.map(cid => renderNodeTree(level + 1, cid)),
+    ]
   }
 
   return renderNodeTree(0, model.rootId)
