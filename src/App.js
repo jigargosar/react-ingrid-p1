@@ -3,6 +3,7 @@ import { nodeById, useAppModel } from './main'
 import validate from 'aproba'
 import * as Zipper from './tree-zipper'
 import * as Tree from './tree'
+import * as R from 'ramda'
 
 function RootTree({ model, effects }) {
   function renderTitle(node) {
@@ -39,7 +40,7 @@ function RootZipper({ model, effects }) {
       <div
         className="pa2"
         tabIndex={0}
-        onClick={() => effects.newLine(node.id)}
+        onClick={() => effects.newLineZ(node.id)}
       >
         {node.title}
       </div>
@@ -59,7 +60,13 @@ function RootZipper({ model, effects }) {
     ]
   }
 
-  return renderNodeTree(0, Zipper.tree(model.zipper))
+  return renderNodeTree(
+    0,
+    R.compose(
+      Zipper.tree,
+      Zipper.root,
+    )(model.zipper),
+  )
 }
 
 function App() {

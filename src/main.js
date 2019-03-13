@@ -4,8 +4,8 @@ import { getCached, setCache } from './cache-helpers'
 import validate from 'aproba'
 import nanoid from 'nanoid'
 import faker from 'faker'
-import * as tree from './tree'
-import * as zipper from './tree-zipper'
+import * as Tree from './tree'
+import * as Zipper from './tree-zipper'
 
 function appendChild(parentId) {
   const node = {
@@ -24,6 +24,18 @@ function useEffects(setModel) {
     () => ({
       log: msg => console.log(msg),
       newLine: parentId => setModel(model => appendChild(parentId)(model)),
+      newLineZ: () => {
+        const node = {
+          id: `n_${nanoid()}`,
+          title: faker.name.lastName(),
+          childIds: [],
+        }
+        return setModel(
+          R.over(R.lensPath(['zipper']))(
+            Zipper.appendChildGoR(Tree.fromDatum(node)),
+          ),
+        )
+      },
     }),
     [],
   )
@@ -46,7 +58,7 @@ export function useAppModel() {
     const def = {
       byId: { [root.id]: root },
       rootId,
-      zipper: zipper.singleton(tree.fromDatum(root)),
+      zipper: Zipper.singleton(Tree.fromDatum(root)),
     }
 
     return R.compose(
