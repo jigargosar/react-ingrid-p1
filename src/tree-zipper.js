@@ -59,6 +59,14 @@ export function tree(z) {
   return z.center
 }
 
+export function datum(z) {
+  validate('O', arguments)
+  return R.compose(
+    Tree.datum,
+    tree,
+  )(z)
+}
+
 export function prevSibling(z) {
   validate('O', arguments)
   const ps = R.last(z.left)

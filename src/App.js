@@ -34,11 +34,17 @@ import * as R from 'ramda'
 // }
 
 function RootZipper({ model, effects }) {
+  const selectedId = R.compose(
+    R.prop('id'),
+    Zipper.datum,
+  )(model.zipper)
+
   function renderTitle(node) {
     validate('O', arguments)
+    const isSelected = selectedId === node.id
     return (
       <div
-        className="pa2"
+        className={`pa2 ${isSelected ? 'bg-light-blue white' : ''}`}
         tabIndex={0}
         // onClick={() => effects.newLineZ(node.id)}
       >
