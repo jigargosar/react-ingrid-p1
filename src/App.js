@@ -4,11 +4,7 @@ import validate from 'aproba'
 
 function NodeTitle({ title, effects, id }) {
   return (
-    <div
-      className="pa3"
-      tabIndex={0}
-      onClick={() => effects.appendChild(id)}
-    >
+    <div className="pa3" tabIndex={0} onClick={() => effects.newLine(id)}>
       {title}
     </div>
   )
@@ -41,7 +37,7 @@ function RootTree({ model, effects }) {
       <div
         className="pa2"
         tabIndex={0}
-        onClick={() => effects.appendChild(node.id)}
+        onClick={() => effects.newLine(node.id)}
       >
         {node.title}
       </div>

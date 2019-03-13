@@ -9,7 +9,7 @@ function useEffects(setModel) {
   return useMemo(
     () => ({
       log: msg => console.log(msg),
-      appendChild: parentId =>
+      newLine: parentId =>
         setModel(model => {
           const node = {
             id: `n_${nanoid()}`,
