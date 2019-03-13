@@ -8,20 +8,21 @@ function useEffects(setModel) {
   return useMemo(
     () => ({
       log: msg => console.log(msg),
-      setRootLabel: () =>
-        setModel(state => R.assocPath(['root', 'title'])('Root1')(state)),
-
       appendChild: parentId =>
-        setModel(model =>
-          R.over(
-            R.lensPath(['byId', parentId, 'children']),
-            R.append({
-              id: `n_${nanoid()}`,
-              title: 'foo',
-              childIds: [],
-            }),
-          )(model),
-        ),
+        setModel(model => {
+          const node = {
+            id: `n_${nanoid()}`,
+            title: 'foo',
+            childIds: [],
+          }
+          return R.compose(
+            R.assocPath(['byId', node.id])(node),
+            R.over(
+              R.lensPath(['byId', parentId, 'childIds']),
+              R.append(node.id),
+            ),
+          )(model)
+        }),
     }),
     [],
   )
@@ -37,7 +38,7 @@ function childIds(id, model) {
   return R.path(['byId', id, 'childIds'])(model)
 }
 
-function nodeById(id, model) {
+export function nodeById(id, model) {
   validate('SO', arguments)
   return R.path(['byId', id])(model)
 }
