@@ -3,6 +3,7 @@ import * as R from 'ramda'
 import { getCached, setCache } from './cache-helpers'
 import validate from 'aproba'
 import nanoid from 'nanoid'
+import faker from 'faker'
 
 function useEffects(setModel) {
   return useMemo(
@@ -12,7 +13,7 @@ function useEffects(setModel) {
         setModel(model => {
           const node = {
             id: `n_${nanoid()}`,
-            title: 'foo',
+            title: faker.name.lastName(),
             childIds: [],
           }
           return R.compose(

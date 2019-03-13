@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "aproba": "latest",
+    "faker": "^4.1.0",
     "nanoid": "^2.0.1",
     "ramda": "^0.26.1",
     "react": "^16.8.4",
@@ -28,6 +29,7 @@
     "not op_mini all"
   ],
   "devDependencies": {
+    "@types/faker": "^4.1.5",
     "@types/nanoid": "^1.2.1",
     "@types/ramda": "^0.26.3",
     "@types/react": "^16.8.8",
