@@ -1,19 +1,23 @@
 import React, { useMemo, useState } from 'react'
 import * as R from 'ramda'
 
-function App() {
-  const [model, setState] = useState(() => ({
-    root: { title: 'Root', children: [] },
-  }))
-
-  const effects = useMemo(
+function useEffects(setState) {
+  return useMemo(
     () => ({
       log: msg => console.log(msg),
       setRootLabel: () =>
         setState(R.assocPath(['root', 'title'])('Root1')),
     }),
-    [model],
+    [],
   )
+}
+
+function App() {
+  const [model, setState] = useState(() => ({
+    root: { title: 'Root', children: [] },
+  }))
+
+  const effects = useEffects(setState)
 
   return (
     <div className="">
