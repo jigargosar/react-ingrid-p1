@@ -24,7 +24,7 @@ export function rootNode(model) {
 export function useAppModel() {
   const [model, setModel] = useState(() => {
     const rootId = 'n_root'
-    const root = { id: rootId, title: 'Root', childIds: [] }
+    const root = { id: rootId, title: 'Root', children: [] }
 
     const def = { byId: { [root.id]: root }, rootId }
 

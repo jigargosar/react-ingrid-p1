@@ -1,8 +1,30 @@
 import React from 'react'
 import { rootNode, useAppModel } from './main'
 
+function NodeTitle({ title }) {
+  return <div className="pa3">{title}</div>
+}
+
+function NodeList({ nodes }) {
+  return (
+    <>
+      {nodes.forEach(node => (
+        <Node key={node.id} node={node} />
+      ))}
+    </>
+  )
+}
+
 function Node({ node }) {
-  return <div className="">{node.title}</div>
+  return (
+    <div className="">
+      <NodeTitle title={node.title} />
+      <div className="pa3">
+        <div className="pl3">Children</div>
+        <NodeList nodes={node.children} />
+      </div>
+    </div>
+  )
 }
 
 function App() {
