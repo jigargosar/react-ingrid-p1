@@ -93,6 +93,66 @@ export function nextSibling(z) {
     : null
 }
 
+const orElseLazy = R.curry(function orElse(thunk, nullable) {
+  validate('F*', arguments)
+  return R.when(R.isNil, thunk, nullable)
+})
+
+// const maybeMap = R.curry(function maybeMap(fn, val) {
+//   validate('F*', arguments)
+//   return R.unless(R.isNil, fn, val)
+// })
+
+export function firstChild(z) {
+  validate('O', arguments)
+  const children = Tree.children(z.center)
+  if (R.isEmpty(children)) return
+
+  return {
+    left: [],
+    center: R.head(children),
+    right: R.tail(children),
+    crumbs: R.prepend({
+      left: z.left,
+      datum: z.center.datum,
+      right: z.right,
+    })(z.crumbs),
+  }
+}
+
+export function next(z) {
+  validate('O', arguments)
+  return R.compose(
+    orElseLazy(() => nextSiblingOfParent(z)),
+    orElseLazy(() => nextSibling(z)),
+    firstChild,
+  )(z)
+}
+
+function nextSiblingOfParent(z) {
+  validate('O', arguments)
+  if (root(z) === z) return null
+  return R.compose(
+    pz =>
+      pz
+        ? R.compose(
+            orElseLazy(() => nextSiblingOfParent(pz)),
+            nextSibling,
+          )(pz)
+        : null,
+    parent,
+  )(z)
+}
+
+export function prev(z) {
+  validate('O', arguments)
+  if (root(z) === z) return null
+  return R.compose(
+    orElseLazy(() => parent(z)),
+    prevSibling,
+  )(z)
+}
+
 export const withRollback = R.curry(function withRollback(opFn, z) {
   validate('FO', arguments)
   const nz = opFn(z)

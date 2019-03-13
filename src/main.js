@@ -29,10 +29,10 @@ function useEffects(setModel) {
       log: msg => console.log(msg),
       newLine: parentId => setModel(model => appendChild(parentId)(model)),
       next() {
-        setModel(overZipper(Zipper.withRollback(Zipper.nextSibling)))
+        setModel(overZipper(Zipper.withRollback(Zipper.next)))
       },
       prev() {
-        setModel(overZipper(Zipper.withRollback(Zipper.prevSibling)))
+        setModel(overZipper(Zipper.withRollback(Zipper.prev)))
       },
       newLineZ: () => {
         const node = {
