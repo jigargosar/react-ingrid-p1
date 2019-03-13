@@ -59,6 +59,24 @@ export function tree(z) {
   return z.center
 }
 
+export function prevSibling(z) {
+  validate('O', arguments)
+  const ps = R.last(z.left)
+  return ps ? { ...z, left: R.init(z.left), center: ps } : null
+}
+
+export function nextSibling(z) {
+  validate('O', arguments)
+  const ns = R.head(z.right)
+  return ns ? { ...z, center: ns, right: R.tail(z.right) } : null
+}
+
+export const withRollback = R.curry(function withRollback(opFn, z) {
+  validate('FO', arguments)
+  const nz = opFn(z)
+  return nz ? nz : z
+})
+
 R.compose(
   R.tap(console.log),
   root,
