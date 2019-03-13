@@ -99,10 +99,6 @@ const orElseLazy = R.curry(function orElse(thunk, nullable) {
   return R.when(R.isNil, thunk, nullable)
 })
 
-const andThen = R.curry(function andThen(fn, nullable) {
-  return nullable ? fn(nullable) : nullable
-})
-
 export function firstChild(z) {
   validate('O', arguments)
   const children = Tree.children(z.center)
