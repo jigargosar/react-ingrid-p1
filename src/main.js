@@ -29,25 +29,9 @@ function useEffects(setModel) {
   )
 }
 
-export function rootNode(model) {
-  validate('O', arguments)
-  return R.path(['byId', model.rootId])(model)
-}
-
-function childIds(id, model) {
-  validate('SO', arguments)
-  return R.path(['byId', id, 'childIds'])(model)
-}
-
 export function nodeById(id, model) {
   validate('SO', arguments)
   return R.path(['byId', id])(model)
-}
-
-export function childNodes(id, model) {
-  validate('SO', arguments)
-  const ids = childIds(id, model)
-  return R.map(id => nodeById(id, model))(ids)
 }
 
 export function useAppModel() {

@@ -1,34 +1,6 @@
 import React from 'react'
-import { childNodes, nodeById, useAppModel } from './main'
+import { nodeById, useAppModel } from './main'
 import validate from 'aproba'
-
-function NodeTitle({ title, effects, id }) {
-  return (
-    <div className="pa3" tabIndex={0} onClick={() => effects.newLine(id)}>
-      {title}
-    </div>
-  )
-}
-
-function Node({ model, node, effects }) {
-  return (
-    <div className="">
-      <NodeTitle title={node.title} effects={effects} id={node.id} />
-      <div className="pl3">
-        <div className="pl3">
-          {childNodes(node.id, model).map(node => (
-            <Node
-              key={node.id}
-              model={model}
-              node={node}
-              effects={effects}
-            />
-          ))}
-        </div>
-      </div>
-    </div>
-  )
-}
 
 function RootTree({ model, effects }) {
   function renderTitle(node) {
