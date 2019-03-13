@@ -1,7 +1,15 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 function App() {
-  return <div className="">HW</div>
+  const [state, setState] = useState(() => ({
+    tree: { datum: 'Root', children: [] },
+  }))
+
+  return (
+    <div className="">
+      <div className="">{state.tree.datum}</div>
+    </div>
+  )
 }
 
 export default App
