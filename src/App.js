@@ -1,9 +1,13 @@
 import React from 'react'
 import { rootNode, useAppModel } from './main'
 
-function NodeTitle({ title, effects }) {
+function NodeTitle({ title, effects, id }) {
   return (
-    <div className="pa3" tabIndex={0} onClick={effects.appendChild}>
+    <div
+      className="pa3"
+      tabIndex={0}
+      onClick={() => effects.appendChild(id)}
+    >
       {title}
     </div>
   )
@@ -22,7 +26,7 @@ function NodeList({ nodes, effects }) {
 function Node({ node, effects }) {
   return (
     <div className="">
-      <NodeTitle title={node.title} effects={effects} />
+      <NodeTitle title={node.title} effects={effects} id={node.id} />
       <div className="pl3">
         <div className="pl3">
           <NodeList nodes={node.children} effects={effects} />
