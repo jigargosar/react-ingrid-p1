@@ -74,14 +74,15 @@ function treeCollapsedProp(tree) {
   )(tree)
 }
 
+const treeHasChildrenAnd = both(Tree.hasChildren)
 export function canExpandTree(tree) {
   validate('O', arguments)
-  return Tree.hasChildren(tree) && treeCollapsedProp(tree)
+  return treeHasChildrenAnd(treeCollapsedProp)(tree)
 }
 
 export function canCollapseTree(tree) {
   validate('O', arguments)
-  return both(Tree.hasChildren, complement(treeCollapsedProp))(tree)
+  return treeHasChildrenAnd(complement(treeCollapsedProp))(tree)
 }
 
 export function useAppModel() {
