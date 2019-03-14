@@ -5,13 +5,17 @@ import * as LineTree from './LineTree'
 import * as Tree from './Tree'
 import validate from 'aproba'
 
+function parentCollapsed() {
+  validate('', arguments)
+}
+
 function anyParentCollapsed(z) {
   validate('O', arguments)
+
+  if (Zipper.isRoot(z)) return false
+
   const pz = Zipper.parent(z)
-  // return pz ? Zipper.datum(pz).collapsed || anyParentCollapsed(pz) : false
-  return pz
-    ? !LineZipper.hasVisibleChildren(pz) || anyParentCollapsed(pz)
-    : false
+  return !LineZipper.hasVisibleChildren(pz) || anyParentCollapsed(pz)
 }
 
 describe('LineZipper', function() {
