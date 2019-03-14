@@ -3,6 +3,15 @@ import { getSelectedId, useAppModel } from './main'
 import * as Zipper from './TreeZipper'
 import * as LineTree from './LineTree'
 
+function IconContainer(props) {
+  return (
+    <div
+      className="w1 flex items-center justify-center us-none"
+      {...props}
+    />
+  )
+}
+
 function TitleLine({ title, icon, isSelected }) {
   const titleRef = useRef()
 
@@ -15,9 +24,7 @@ function TitleLine({ title, icon, isSelected }) {
 
   return (
     <div className="flex code ph2">
-      <div className="w1 flex items-center justify-center us-none">
-        {icon}
-      </div>
+      <IconContainer>{icon}</IconContainer>
       <div
         ref={titleRef}
         className={`outline-0 br1 lh-copy ph2 ${
