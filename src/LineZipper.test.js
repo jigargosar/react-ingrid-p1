@@ -19,7 +19,6 @@ describe('LineZipper', function() {
       },
       `
 Object {
-  "childIds": Array [],
   "collapsed": false,
   "id": Any<String>,
   "title": Any<String>,

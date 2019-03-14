@@ -94,7 +94,6 @@ export function newLine() {
     id: `n_${nanoid()}`,
     title: faker.name.lastName(),
     collapsed: false,
-    childIds: [],
   }
   return Tree.fromDatum(line)
 }
