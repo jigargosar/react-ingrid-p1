@@ -65,5 +65,5 @@ export const next = Zipper.withRollback(
 
 export function parentWithRollback(z) {
   validate('O', arguments)
-  return Zipper.withRollback(z.parent, z)
+  return Zipper.withRollback(Zipper.parent, z)
 }
