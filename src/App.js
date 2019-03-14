@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useLayoutEffect, useRef } from 'react'
 import { getIsEditMode, getSelectedId, useAppModel } from './main'
 import * as Zipper from './TreeZipper'
 import * as LineTree from './LineTree'
@@ -14,7 +14,7 @@ function IconContainer(props) {
 
 function TitleLine({ title, icon, isSelected, isEditing, onTitleChange }) {
   const titleRef = useRef()
-  useEffect(() => {
+  useLayoutEffect(() => {
     const el = titleRef.current
     if (el && isSelected) {
       el.focus()
@@ -28,24 +28,24 @@ function TitleLine({ title, icon, isSelected, isEditing, onTitleChange }) {
       el.style.height = el.scrollHeight + 'px'
     }
   }
+  useEffect(resizeHeight, [title])
   return (
     <div className="flex code ph2">
       <IconContainer>{icon}</IconContainer>
-      <textarea
-        rows={1}
-        ref={titleRef}
-        className={`dib ma0 bw0 br2 lh-copy outline-0 resize-none ${
-          isSelected ? 'bg-blue white' : 'bg-transparent color-inherit'
-        }`}
-        tabIndex={isSelected ? 0 : null}
-        // onClick={() => effects.newLineZ(node.id)}
-        disabled={!isEditing}
-        value={title}
-        onChange={e => {
-          resizeHeight()
-          return onTitleChange(e.target.value)
-        }}
-      />
+      <div className="">
+        <textarea
+          rows={1}
+          ref={titleRef}
+          className={`db ma0 bw0 br2 lh-copy outline-0 resize-none ${
+            isSelected ? 'bg-blue white' : 'bg-transparent color-inherit'
+          }`}
+          style={{ minWidth: 'max-content' }}
+          tabIndex={isSelected ? 0 : null}
+          value={title}
+          onChange={e => onTitleChange(e.target.value)}
+          disabled={!isEditing}
+        />
+      </div>
     </div>
   )
 }
