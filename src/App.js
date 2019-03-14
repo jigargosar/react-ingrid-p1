@@ -46,7 +46,6 @@ function TitleLine({ title, icon, isSelected, isEditing, onTitleChange }) {
             rows={1}
             ref={titleRef}
             className={`flex-grow-1 ma0 pa0 bw0 br2 lh-inherit outline-0 resize-none bg-inherit color-inherit`}
-            style={{ minWidth: 'max-content' }}
             tabIndex={isSelected ? 0 : null}
             value={title}
             onChange={e => onTitleChange(e.target.value)}
@@ -55,8 +54,7 @@ function TitleLine({ title, icon, isSelected, isEditing, onTitleChange }) {
         ) : (
           <div
             ref={titleRef}
-            className={`pre flex-grow-1 ma0 pa0  bw0 br2 outline-0`}
-            style={{ minWidth: 'max-content' }}
+            className={`pre-line flex-grow-1 ma0 pa0  bw0 br2 outline-0`}
             tabIndex={isSelected ? 0 : null}
           >
             {title}
