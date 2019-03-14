@@ -148,6 +148,7 @@ export function useAppModel() {
         ['tab', effects.indent],
         ['shift+tab', effects.outdent],
         [['cmd+enter', 'esc'], effects.stopEditMode],
+        ['enter', effects.newLine],
       ]
 
       createHotKeyHandler(
