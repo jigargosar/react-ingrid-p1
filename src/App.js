@@ -7,9 +7,7 @@ import * as R from 'ramda'
 import * as LineTree from './LineTree'
 
 function visibleChildren(tree) {
-  const collapsedProp = LineTree.collapsedProp(tree)
-  console.log(`tree.datum, collapsedProp`, tree.datum, collapsedProp)
-  return collapsedProp ? [] : Tree.children(tree)
+  return LineTree.collapsedProp(tree) ? [] : Tree.children(tree)
 }
 
 function RootZipper({ model }) {
