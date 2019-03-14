@@ -17,8 +17,8 @@ import {
   mergeDeepRight,
   over,
   prop,
-  propOr,
 } from 'ramda'
+import { collapsedProp } from './Node'
 
 const zipperL = lensPath(['zipper'])
 const overZipper = over(zipperL)
@@ -64,8 +64,6 @@ function useEffects(setModel) {
   )
 }
 
-const collapsedProp = propOr(false, 'collapsed')
-
 function treeCollapsedProp(tree) {
   validate('O', arguments)
   return compose(
@@ -75,6 +73,7 @@ function treeCollapsedProp(tree) {
 }
 
 const treeHasChildrenAnd = both(Tree.hasChildren)
+
 export function canExpandTree(tree) {
   validate('O', arguments)
   return treeHasChildrenAnd(treeCollapsedProp)(tree)
