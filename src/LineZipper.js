@@ -67,3 +67,13 @@ export function parentWithRollback(z) {
   validate('O', arguments)
   return Zipper.withRollback(Zipper.parent, z)
 }
+
+export function nest(z) {
+  validate('O', arguments)
+  const ps = Zipper.prevSibling(z)
+  if (ps) {
+    pipe(Zipper.removeGoL)
+  }
+
+  return z
+}

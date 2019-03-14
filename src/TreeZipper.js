@@ -1,6 +1,15 @@
 import validate from 'aproba'
 import * as R from 'ramda'
-import { compose, curry, ifElse, isNil, when } from 'ramda'
+import {
+  compose,
+  curry,
+  ifElse,
+  init,
+  isEmpty,
+  isNil,
+  last,
+  when,
+} from 'ramda'
 import * as Tree from './Tree'
 
 export function singleton(tree) {
@@ -191,6 +200,11 @@ export const mapTree = curry(function mapTree(fn, z) {
   validate('FO', arguments)
   return { ...z, center: fn(z.center) }
 })
+
+export function removeGoL(z) {
+  if (isEmpty(z.left)) return null
+  return { ...z, left: init(z.left), center: last(z.left) }
+}
 
 export function findPrev(pred) {
   validate('F', arguments)
