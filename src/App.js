@@ -99,27 +99,23 @@ function LineTreeView(props) {
     </>
   )
 }
-function RootZipper({ model, effects }) {
-  return (
-    <LineTreeView
-      {...{
-        level: 0,
-        tree: Zipper.rootTree(model.zipper),
-        selectedId: getSelectedId(model),
-        isEditMode: getIsEditMode(model),
-        effects,
-      }}
-    />
-  )
-}
 
 function App() {
   const [model, effects] = useAppModel()
 
+  const isEditMode = getIsEditMode(model)
   return (
-    <div className="">
+    <div className={`min-vh-100 ${isEditMode ? 'bg-black-20' : ''}`}>
       {/*<RootTree model={model} effects={effects} />*/}
-      <RootZipper model={model} effects={effects} />
+      <LineTreeView
+        {...{
+          level: 0,
+          tree: Zipper.rootTree(model.zipper),
+          selectedId: getSelectedId(model),
+          isEditMode,
+          effects,
+        }}
+      />
     </div>
   )
 }
