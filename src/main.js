@@ -69,15 +69,8 @@ function useEffects(setModel) {
 
 export function useAppModel() {
   const [model, setModel] = useState(() => {
-    const root = {
-      id: 'n_root',
-      title: 'Root',
-      childIds: [],
-      collapsed: false,
-    }
-
     const def = {
-      zipper: Zipper.singleton(Tree.fromDatum(root)),
+      zipper: LineZipper.initial,
     }
 
     return compose(

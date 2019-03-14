@@ -11,6 +11,15 @@ import {
 } from 'ramda'
 import * as Tree from './Tree'
 
+const root = {
+  id: 'n_root',
+  title: 'Root',
+  childIds: [],
+  collapsed: false,
+}
+
+export const initial = Tree.fromDatum(root)
+
 const datum = Tree.datum
 
 function datumProp(pn, tree) {

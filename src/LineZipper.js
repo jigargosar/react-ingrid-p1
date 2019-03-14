@@ -3,6 +3,8 @@ import * as Zipper from './TreeZipper'
 import * as LineTree from './LineTree'
 import { either, ifElse, isNil, pipe, T } from 'ramda'
 
+export const initial = Zipper.singleton(LineTree.initial)
+
 function hasVisibleChildren(z) {
   validate('O', arguments)
   const fn = pipe(
