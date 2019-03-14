@@ -142,6 +142,7 @@ export function useAppModel() {
         ['cmd+up', effects.moveL],
         ['cmd+down', effects.moveR],
         ['space', effects.startEditMode],
+        ['enter', effects.newLine],
       ]
       const editModeKeyMap = [
         ['tab', effects.indent],
