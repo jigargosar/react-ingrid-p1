@@ -51,7 +51,7 @@ function LineTreeView({ level, tree, selectedId }) {
             tree,
             icon: LineTree.expandIcon(tree),
             title: LineTree.title(tree),
-            isSelected: LineTree.treeIdEq(selectedId, tree),
+            isSelected: LineTree.idEq(selectedId, tree),
           }}
         />
       </div>

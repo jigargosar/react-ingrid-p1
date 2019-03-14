@@ -58,7 +58,7 @@ export function id(tree) {
   return datumProp('id', tree)
 }
 
-export function treeIdEq(id_, tree) {
+export function idEq(id_, tree) {
   validate('SO', arguments)
   return id(tree) === id_
 }
