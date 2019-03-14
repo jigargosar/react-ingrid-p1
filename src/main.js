@@ -73,6 +73,9 @@ function useEffects(setModel) {
           ),
         )
       },
+      onTitleChange(newTitle) {
+        updateZipper(LineZipper.setTitle(newTitle))
+      },
     }
   }, [setModel])
 }

@@ -1,7 +1,7 @@
 import validate from 'aproba'
 import * as Zipper from './TreeZipper'
 import * as LineTree from './LineTree'
-import { pipe } from 'ramda'
+import { assoc, pipe } from 'ramda'
 
 export const initial = Zipper.singleton(LineTree.initial)
 
@@ -93,6 +93,12 @@ export function outdent(z) {
     return outdent_(z)
   }
   return z
+}
+
+export function setTitle(newTitle) {
+  return function(z) {
+    return Zipper.mapDatum(assoc('title', newTitle))(z)
+  }
 }
 
 export function moveL(z) {
