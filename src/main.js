@@ -48,7 +48,7 @@ function useEffects(setModel) {
         )
       },
       collapseOrPrev() {
-        updateZipper(Zipper.mapDatum(assoc('collapsed', true)))
+        updateZipper(ifElse(LineZipper.canCollapse, LineZipper.collapse))
       },
       expandOrNext() {
         updateZipper(Zipper.mapDatum(assoc('collapsed', false)))

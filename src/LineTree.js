@@ -1,6 +1,7 @@
 import validate from 'aproba'
 import {
   always,
+  assoc,
   both,
   complement,
   cond,
@@ -58,6 +59,16 @@ export function hasCollapsedChildren(tree) {
 export function canCollapse(tree) {
   validate('O', arguments)
   return hasChildrenAnd(complement(collapsedProp))(tree)
+}
+
+export function collapse(tree) {
+  validate('O', arguments)
+  return Tree.mapDatum(assoc('collapsed', true))(tree)
+}
+
+export function expand(tree) {
+  validate('O', arguments)
+  return Tree.mapDatum(assoc('collapsed', false))(tree)
 }
 
 export function expandIcon(tree) {

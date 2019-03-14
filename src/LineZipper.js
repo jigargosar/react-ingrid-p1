@@ -28,3 +28,38 @@ export function anyParentCollapsed(z) {
   const pz = Zipper.parent(z)
   return hasCollapsedChildren(pz) || anyParentCollapsed(pz)
 }
+
+export function canCollapse(z) {
+  validate('O', arguments)
+  const fn = pipe(
+    Zipper.tree,
+    LineTree.canCollapse,
+  )
+  return fn(z)
+}
+
+export function canExpand(z) {
+  validate('O', arguments)
+  const fn = pipe(
+    Zipper.tree,
+    LineTree.canExpand,
+  )
+  return fn(z)
+}
+
+export function collapse(z) {
+  validate('O', arguments)
+  const fn = pipe(
+    Zipper.tree,
+    LineTree.collapse,
+  )
+  return fn(z)
+}
+export function expand(z) {
+  validate('O', arguments)
+  const fn = pipe(
+    Zipper.tree,
+    LineTree.expand,
+  )
+  return fn(z)
+}
