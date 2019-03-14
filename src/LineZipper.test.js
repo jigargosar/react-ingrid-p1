@@ -12,7 +12,16 @@ describe('LineZipper', function() {
       LineZipper.initial,
     )
 
-    expect(z).toBeDefined()
-    expect(z).toMatchObject({ center: expect.anything() })
+    expect(Zipper.tree(z)).toMatchInlineSnapshot(`
+Object {
+  "children": Array [],
+  "datum": Object {
+    "childIds": Array [],
+    "collapsed": false,
+    "id": "n_Kue3CMPj-RP144SXJ32OK",
+    "title": "Boyle",
+  },
+}
+`)
   })
 })
