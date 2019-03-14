@@ -36,7 +36,7 @@ function TitleLine({ title, icon, isSelected, isEditing, onTitleChange }) {
         <textarea
           rows={1}
           ref={titleRef}
-          className={`flex-grow-1 ma0 pa0 bw0 br2 lh-title outline-0 resize-none ${
+          className={`flex-grow-1 ma0 pa0 bw0 br2 lh-solid outline-0 resize-none ${
             isSelected ? 'bg-blue white' : 'bg-transparent color-inherit'
           }`}
           style={{ minWidth: 'max-content' }}
@@ -48,7 +48,7 @@ function TitleLine({ title, icon, isSelected, isEditing, onTitleChange }) {
       ) : (
         <div
           ref={titleRef}
-          className={`pre flex-grow-1 ma0 pa0  bw0 br2 lh-title outline-0 ${
+          className={`pre flex-grow-1 ma0 pa0  bw0 br2 lh-solid outline-0 ${
             isSelected ? 'bg-blue white' : 'bg-transparent color-inherit'
           }`}
           style={{ minWidth: 'max-content' }}
