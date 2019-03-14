@@ -30,7 +30,7 @@ function useEffects(setModel) {
       setModel(overZipper(uFn))
     }
 
-    return {
+    const effects = {
       next() {
         updateZipper(LineZipper.next)
       },
@@ -66,7 +66,7 @@ function useEffects(setModel) {
       newLine: () => {
         const tree = LineTree.newLine()
 
-        return updateZipper(
+        updateZipper(
           ifElse(
             Zipper.isRoot,
             Zipper.appendChildGoR(tree),
@@ -74,8 +74,12 @@ function useEffects(setModel) {
           ),
         )
       },
+      newLineAndStartEditing: () => {
+        effects.newLine()
+        effects.startEditMode()
+      },
       deleteLine: () => {
-        return updateZipper(LineZipper.deleteLine)
+        updateZipper(LineZipper.deleteLine)
       },
       startEditMode() {
         setModel(m => {
@@ -91,6 +95,7 @@ function useEffects(setModel) {
         updateZipper(LineZipper.setTitle(newTitle))
       },
     }
+    return effects
   }, [setModel])
 }
 
