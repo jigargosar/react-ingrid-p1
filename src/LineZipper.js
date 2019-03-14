@@ -81,3 +81,16 @@ export function indent(z) {
   }
   return z
 }
+
+export function outdent(z) {
+  validate('O', arguments)
+  const gp = Zipper.grandParent(z)
+  if (gp) {
+    const outdent_ = pipe(
+      Zipper.removeGoUp,
+      Zipper.appendGoR(Zipper.tree(z)),
+    )
+    return outdent_(z)
+  }
+  return z
+}

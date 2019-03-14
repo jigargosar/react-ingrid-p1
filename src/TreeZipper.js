@@ -3,11 +3,15 @@ import * as R from 'ramda'
 import {
   compose,
   curry,
+  head,
   ifElse,
   init,
   isEmpty,
   isNil,
   last,
+  pipe,
+  tail,
+  unless,
   when,
 } from 'ramda'
 import * as Tree from './Tree'
@@ -39,6 +43,15 @@ export const appendChildGoR = R.curry(function appendChildGoR(child, z) {
     })(z.crumbs),
   }
 })
+
+export function grandParent(z) {
+  validate('O', arguments)
+
+  return pipe(
+    parent,
+    unless(isNil, parent),
+  )(z)
+}
 
 export function parent(z) {
   validate('O', arguments)
@@ -204,6 +217,29 @@ export const mapTree = curry(function mapTree(fn, z) {
 export function removeGoL(z) {
   if (isEmpty(z.left)) return null
   return { ...z, left: init(z.left), center: last(z.left) }
+}
+
+export function removeGoUp(z) {
+  validate('O', arguments)
+  if (isEmpty(z.crumbs)) {
+    return null
+  } else {
+    const crumb = head(z.crumbs)
+    return {
+      left: crumb.left,
+      center: compose(
+        Tree.replaceChildren([...z.left, ...z.right]),
+        Tree.fromDatum,
+      )(crumb.datum),
+      right: crumb.right,
+      crumbs: tail(z.crumbs),
+    }
+  }
+
+  // const pz = parent(z)
+  // if(!pz) return null
+  //
+  // return { ...z, left: init(z.left), center: last(z.left) }
 }
 
 export function findPrev(pred) {

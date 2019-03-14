@@ -53,6 +53,9 @@ function useEffects(setModel) {
       indent() {
         updateZipper(LineZipper.indent)
       },
+      outdent() {
+        updateZipper(LineZipper.outdent)
+      },
       newLine: () => {
         const tree = LineTree.newLine()
 
@@ -108,6 +111,7 @@ export function useAppModel() {
         ['left', effects.collapseOrParent],
         ['right', effects.expandOrNext],
         ['tab', effects.indent],
+        ['shift+tab', effects.outdent],
       ]
 
       createHotKeyHandler(keyMap)(e)
