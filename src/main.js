@@ -68,6 +68,18 @@ function useEffects(setModel) {
   }, [setModel])
 }
 
+const createHotKeyHandler = compose(
+  cond,
+  append([T, identity]),
+  map(([k, f]) => [
+    isHotKey(k),
+    e => {
+      f()
+      e.preventDefault()
+    },
+  ]),
+)
+
 export function useAppModel() {
   const [model, setModel] = useState(() => {
     const def = {
@@ -97,21 +109,8 @@ export function useAppModel() {
         ['right', effects.expandOrNext],
       ]
 
-      const createEventHandler = compose(
-        cond,
-        append([T, identity]),
-        map((k, f) => [
-          isHotKey(k),
-          e => {
-            f()
-            e.preventDefault()
-          },
-        ]),
-      )
-
-      const eventHandler = createEventHandler(keyMap)
-
-      eventHandler(e)
+      const hotKeyHandler = createHotKeyHandler(keyMap)
+      hotKeyHandler(e)
     }
 
     window.addEventListener('keydown', listener)
