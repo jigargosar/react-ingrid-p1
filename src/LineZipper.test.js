@@ -8,7 +8,10 @@ import validate from 'aproba'
 function anyParentCollapsed(z) {
   validate('O', arguments)
   const pz = Zipper.parent(z)
-  return pz ? Zipper.datum(pz).collapsed || anyParentCollapsed(pz) : false
+  // return pz ? Zipper.datum(pz).collapsed || anyParentCollapsed(pz) : false
+  return pz
+    ? !LineZipper.hasVisibleChildren(pz) || anyParentCollapsed(pz)
+    : false
 }
 
 describe('LineZipper', function() {

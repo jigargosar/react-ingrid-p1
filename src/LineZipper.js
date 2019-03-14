@@ -5,7 +5,7 @@ import { either, ifElse, isNil, pipe, T } from 'ramda'
 
 export const initial = Zipper.singleton(LineTree.initial)
 
-function hasVisibleChildren(z) {
+export function hasVisibleChildren(z) {
   validate('O', arguments)
   const fn = pipe(
     Zipper.tree,
