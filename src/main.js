@@ -5,6 +5,7 @@ import * as Zipper from './TreeZipper'
 import isHotKey from 'is-hotkey'
 import {
   append,
+  assoc,
   compose,
   cond,
   defaultTo,
@@ -73,6 +74,9 @@ function useEffects(setModel) {
           ),
         )
       },
+      startEditMode() {
+        setModel(assoc('editMode', true))
+      },
       onTitleChange(newTitle) {
         updateZipper(LineZipper.setTitle(newTitle))
       },
@@ -129,6 +133,7 @@ export function useAppModel() {
         ['shift+tab', effects.outdent],
         ['cmd+up', effects.moveL],
         ['cmd+down', effects.moveR],
+        ['space', effects.startEditMode],
       ]
 
       createHotKeyHandler(keyMap)(e)
