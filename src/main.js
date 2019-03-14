@@ -132,7 +132,7 @@ export function useAppModel() {
     function listener(e) {
       validate('O', arguments)
       // console.log(`e`, e)
-      const keyMap = [
+      const normalModeKeyMap = [
         ['down', effects.next],
         ['up', effects.prev],
         ['left', effects.collapseOrParent],
@@ -142,15 +142,21 @@ export function useAppModel() {
         ['cmd+up', effects.moveL],
         ['cmd+down', effects.moveR],
         ['space', effects.startEditMode],
+      ]
+      const editModeKeyMap = [
+        ['tab', effects.indent],
+        ['shift+tab', effects.outdent],
         [['cmd+enter', 'esc'], effects.stopEditMode],
       ]
 
-      createHotKeyHandler(keyMap)(e)
+      createHotKeyHandler(
+        model.editMode ? editModeKeyMap : normalModeKeyMap,
+      )(e)
     }
 
     window.addEventListener('keydown', listener)
     return () => window.removeEventListener('keydown', listener)
-  }, [])
+  }, [model.editMode])
 
   const effects = useEffects(setModel)
   return [model, effects]
