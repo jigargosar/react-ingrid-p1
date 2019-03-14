@@ -14,35 +14,35 @@ import {
   lensPath,
   mergeDeepRight,
   over,
-  pipe,
   prop,
 } from 'ramda'
-import * as LineTree from './LineTree'
+import * as LineZipper from './LineZipper'
 
 const zipperL = lensPath(['zipper'])
 const overZipper = over(zipperL)
 
 function useEffects(setModel) {
-  return useMemo(
-    () => ({
+  return useMemo(() => {
+    function updateZipper(uFn) {
+      setModel(overZipper(uFn))
+    }
+
+    return {
       log: msg => console.log(msg),
 
       next() {
-        setModel(overZipper(Zipper.withRollback(Zipper.next)))
+        updateZipper(Zipper.withRollback(Zipper.next))
       },
       prev() {
-        const pred = pipe(
-          Zipper.tree,
-          LineTree.hasVisibleChildren,
+        updateZipper(
+          Zipper.withRollback(Zipper.findPrev(LineZipper.isVisible)),
         )
-        const fn = Zipper.withRollback(Zipper.findPrev(pred))
-        setModel(overZipper(fn))
       },
       collapseOrPrev() {
-        setModel(overZipper(Zipper.mapDatum(assoc('collapsed', true))))
+        updateZipper(Zipper.mapDatum(assoc('collapsed', true)))
       },
       expandOrNext() {
-        setModel(overZipper(Zipper.mapDatum(assoc('collapsed', false))))
+        updateZipper(Zipper.mapDatum(assoc('collapsed', false)))
       },
       newLineZ: () => {
         const node = {
@@ -53,19 +53,16 @@ function useEffects(setModel) {
         }
         const tree = Tree.fromDatum(node)
 
-        return setModel(
-          overZipper(
-            ifElse(
-              z => Zipper.root(z) === z,
-              Zipper.appendChildGoR(tree),
-              Zipper.appendGoR(tree),
-            ),
+        return updateZipper(
+          ifElse(
+            Zipper.isRoot,
+            Zipper.appendChildGoR(tree),
+            Zipper.appendGoR(tree),
           ),
         )
       },
-    }),
-    [],
-  )
+    }
+  }, [setModel])
 }
 
 export function useAppModel() {
