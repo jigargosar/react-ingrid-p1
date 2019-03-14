@@ -24,22 +24,22 @@ function datumProp(pn, tree) {
 
 function datumPropOr(def, pn, tree) {
   validate('*SO', arguments)
-  return propOr(def, pn, tree)
+  return propOr(def, pn, datum(tree))
 }
 
-function collapsedProp(tree) {
+export function collapsedProp(tree) {
   validate('O', arguments)
   return datumPropOr(false, 'collapsed', tree)
 }
 
 const hasChildrenAnd = both(Tree.hasChildren)
 
-function canExpand(tree) {
+export function canExpand(tree) {
   validate('O', arguments)
   return hasChildrenAnd(collapsedProp)(tree)
 }
 
-function canCollapse(tree) {
+export function canCollapse(tree) {
   validate('O', arguments)
   return hasChildrenAnd(complement(collapsedProp))(tree)
 }

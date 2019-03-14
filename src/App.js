@@ -6,6 +6,12 @@ import * as Tree from './Tree'
 import * as R from 'ramda'
 import * as LineTree from './LineTree'
 
+function visibleChildren(tree) {
+  const collapsedProp = LineTree.collapsedProp(tree)
+  console.log(`tree.datum, collapsedProp`, tree.datum, collapsedProp)
+  return collapsedProp ? [] : Tree.children(tree)
+}
+
 function RootZipper({ model }) {
   const selectedId = getSelectedId(model)
 
@@ -37,7 +43,7 @@ function RootZipper({ model }) {
       >
         {renderTitleLine(tree)}
       </div>,
-      ...Tree.children(tree).map(childNode =>
+      ...visibleChildren(tree).map(childNode =>
         renderNodeTree(level + 1, childNode),
       ),
     ]
