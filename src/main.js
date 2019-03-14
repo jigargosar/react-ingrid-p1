@@ -14,8 +14,10 @@ import {
   lensPath,
   mergeDeepRight,
   over,
+  pipe,
   prop,
 } from 'ramda'
+import * as LineTree from './LineTree'
 
 const zipperL = lensPath(['zipper'])
 const overZipper = over(zipperL)
@@ -29,7 +31,12 @@ function useEffects(setModel) {
         setModel(overZipper(Zipper.withRollback(Zipper.next)))
       },
       prev() {
-        setModel(overZipper(Zipper.withRollback(Zipper.prev)))
+        const pred = pipe(
+          Zipper.tree,
+          LineTree.isVisible,
+        )
+        const fn = Zipper.withRollback(Zipper.findPrev(pred))
+        setModel(overZipper(fn))
       },
       collapseOrPrev() {
         setModel(overZipper(Zipper.mapDatum(assoc('collapsed', true))))

@@ -71,3 +71,7 @@ export function title(tree) {
 export function visibleChildren(tree) {
   return collapsedProp(tree) ? [] : Tree.children(tree)
 }
+
+export function isVisible(tree) {
+  return true
+}
