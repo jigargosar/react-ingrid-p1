@@ -33,7 +33,7 @@ function TitleLine({ title, icon, isSelected, isEditing, onTitleChange }) {
     <div className="flex code ph2">
       <IconContainer>{icon}</IconContainer>
       <div
-        className={`${
+        className={`br2 ph2 pv1 ${
           isSelected ? 'bg-blue white' : 'bg-transparent color-inherit'
         }`}
       >
@@ -41,7 +41,7 @@ function TitleLine({ title, icon, isSelected, isEditing, onTitleChange }) {
           <textarea
             rows={1}
             ref={titleRef}
-            className={`flex-grow-1 ma0 pa0 bw0 br2 lh-solid outline-0 resize-none`}
+            className={`flex-grow-1 ma0 pa0 bw0 br2 lh-inherit outline-0 resize-none bg-inherit color-inherit`}
             style={{ minWidth: 'max-content' }}
             tabIndex={isSelected ? 0 : null}
             value={title}
@@ -51,7 +51,7 @@ function TitleLine({ title, icon, isSelected, isEditing, onTitleChange }) {
         ) : (
           <div
             ref={titleRef}
-            className={`pre flex-grow-1 ma0 pa0  bw0 br2 lh-solid outline-0`}
+            className={`pre flex-grow-1 ma0 pa0  bw0 br2 outline-0`}
             style={{ minWidth: 'max-content' }}
             tabIndex={isSelected ? 0 : null}
           >
