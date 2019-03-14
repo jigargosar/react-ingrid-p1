@@ -33,7 +33,7 @@ function TitleLine({ title, icon, isSelected, isEditing, onTitleChange }) {
     <div className="flex code ph2">
       <IconContainer>{icon}</IconContainer>
       <div
-        className={`br2 ph2 pv1 ${
+        className={`flex-grow-1 flex br2 ph2 pv1 lh-title ${
           isSelected ? 'bg-blue white' : 'bg-transparent color-inherit'
         }`}
       >
