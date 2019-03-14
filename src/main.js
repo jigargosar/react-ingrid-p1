@@ -84,7 +84,7 @@ export function useAppModel() {
   useEffect(() => {
     function listener(e) {
       validate('O', arguments)
-      console.log(`e`, e)
+      // console.log(`e`, e)
       if (isHotKey('down')(e)) {
         e.preventDefault()
         effects.next()
