@@ -47,6 +47,11 @@ const hasChildrenAnd = both(Tree.hasChildren)
 
 export function canExpand(tree) {
   validate('O', arguments)
+  return hasCollapsedChildren(tree)
+}
+
+export function hasCollapsedChildren(tree) {
+  validate('O', arguments)
   return hasChildrenAnd(collapsedProp)(tree)
 }
 
