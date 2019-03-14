@@ -5,29 +5,29 @@ import * as Zipper from './TreeZipper'
 import * as R from 'ramda'
 import * as LineTree from './LineTree'
 
+function renderTitleLine({ tree, isSelected }) {
+  validate('O', arguments)
+
+  return (
+    <div className="flex code ph2">
+      <div className=" flex items-center w1">
+        {LineTree.expandIcon(tree)}
+      </div>
+      <div
+        className={`br1 lh-copy ph2 ${
+          isSelected ? 'bg-light-blue white' : ''
+        }`}
+        // tabIndex={isSelected ? 0 : null}
+        // onClick={() => effects.newLineZ(node.id)}
+      >
+        {LineTree.title(tree)}
+      </div>
+    </div>
+  )
+}
+
 function RootZipper({ model }) {
   const selectedId = getSelectedId(model)
-
-  function renderTitleLine(tree) {
-    validate('O', arguments)
-    const isSelected = LineTree.treeIdEq(selectedId, tree)
-    return (
-      <div className="flex code ph2">
-        <div className=" flex items-center w1">
-          {LineTree.expandIcon(tree)}
-        </div>
-        <div
-          className={`br1 lh-copy ph2 ${
-            isSelected ? 'bg-light-blue white' : ''
-          }`}
-          // tabIndex={isSelected ? 0 : null}
-          // onClick={() => effects.newLineZ(node.id)}
-        >
-          {LineTree.title(tree)}
-        </div>
-      </div>
-    )
-  }
 
   function renderNodeTree(level, tree) {
     validate('NO', arguments)
@@ -36,7 +36,10 @@ function RootZipper({ model }) {
         key={LineTree.id(tree)}
         style={{ paddingLeft: `${level * 1.5}rem` }}
       >
-        {renderTitleLine(tree)}
+        {renderTitleLine({
+          tree,
+          isSelected: LineTree.treeIdEq(selectedId, tree),
+        })}
       </div>,
       ...LineTree.visibleChildren(tree).map(childNode =>
         renderNodeTree(level + 1, childNode),
