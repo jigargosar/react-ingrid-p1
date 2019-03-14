@@ -48,7 +48,7 @@ function useEffects(setModel) {
       expandOrNext() {
         updateZipper(Zipper.mapDatum(assoc('collapsed', false)))
       },
-      newLineZ: () => {
+      newLine: () => {
         const tree = LineTree.newLine()
 
         return updateZipper(
@@ -103,7 +103,7 @@ export function useAppModel() {
       }
       if (isHotKey('enter')(e)) {
         e.preventDefault()
-        effects.newLineZ()
+        effects.newLine()
       }
     }
     window.addEventListener('keydown', listener)
