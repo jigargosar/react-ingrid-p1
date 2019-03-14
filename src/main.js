@@ -8,8 +8,6 @@ import * as Zipper from './TreeZipper'
 import isHotKey from 'is-hotkey'
 import {
   assoc,
-  both,
-  complement,
   compose,
   defaultTo,
   ifElse,
@@ -18,7 +16,6 @@ import {
   over,
   prop,
 } from 'ramda'
-import { collapsedProp } from './Node'
 
 const zipperL = lensPath(['zipper'])
 const overZipper = over(zipperL)
@@ -62,26 +59,6 @@ function useEffects(setModel) {
     }),
     [],
   )
-}
-
-function treeCollapsedProp(tree) {
-  validate('O', arguments)
-  return compose(
-    collapsedProp,
-    Tree.datum,
-  )(tree)
-}
-
-const treeHasChildrenAnd = both(Tree.hasChildren)
-
-export function canExpandTree(tree) {
-  validate('O', arguments)
-  return treeHasChildrenAnd(treeCollapsedProp)(tree)
-}
-
-export function canCollapseTree(tree) {
-  validate('O', arguments)
-  return treeHasChildrenAnd(complement(treeCollapsedProp))(tree)
 }
 
 export function useAppModel() {
