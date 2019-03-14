@@ -14,7 +14,6 @@ function IconContainer(props) {
 
 function TitleLine({ title, icon, isSelected, isEditing, onTitleChange }) {
   const titleRef = useRef()
-  console.log(`isEditing`, isEditing)
   useEffect(() => {
     const el = titleRef.current
     if (el && isSelected) {
