@@ -1836,7 +1836,7 @@ babel-plugin-jest-hoist@^23.2.0:
   resolved "https://registry.yarnpkg.com/babel-plugin-jest-hoist/-/babel-plugin-jest-hoist-23.2.0.tgz#e61fae05a1ca8801aadee57a6d66b8cefaf44167"
   integrity sha1-5h+uBaHKiAGq3uV6bWa4zvr0QWc=
 
-babel-plugin-macros@2.5.0:
+babel-plugin-macros@2.5.0, babel-plugin-macros@^2.0.0, babel-plugin-macros@^2.4.2, babel-plugin-macros@^2.4.5:
   version "2.5.0"
   resolved "https://registry.yarnpkg.com/babel-plugin-macros/-/babel-plugin-macros-2.5.0.tgz#01f4d3b50ed567a67b80a30b9da066e94f4097b6"
   integrity sha512-BWw0lD0kVZAXRD3Od1kMrdmfudqzDzYv2qrN3l2ISR1HVp1EgLKfbOrYV9xmY5k3qx3RIu5uPAUZZZHpo0o5Iw==
@@ -4976,6 +4976,13 @@ identity-obj-proxy@3.0.0:
   dependencies:
     harmony-reflect "^1.4.6"
 
+idx.macro@^3.0.4:
+  version "3.0.4"
+  resolved "https://registry.yarnpkg.com/idx.macro/-/idx.macro-3.0.4.tgz#b200f5329f73418caf6a3ac5740882ab4bbd530c"
+  integrity sha512-P9MncgFl8aNwA0uvgvYoIUbBAMPrlAiMKYEmI54Mx+AY/O+NmOWN+Q7dhCdoOpEMVpUBUDooptHSJO1IdLczow==
+  dependencies:
+    babel-plugin-macros "^2.4.2"
+
 ieee754@^1.1.4:
   version "1.1.12"
   resolved "https://registry.yarnpkg.com/ieee754/-/ieee754-1.1.12.tgz#50bf24e5b9c8bb98af4964c941cdb0918da7b60b"
@@ -7453,6 +7460,13 @@ param-case@2.1.x:
   dependencies:
     no-case "^2.2.0"
 
+param.macro@^3.2.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/param.macro/-/param.macro-3.2.0.tgz#094d47dd3fa3af7f9b5b6cd6eab78d835e9901b6"
+  integrity sha512-yXZ1zqyEPXFXnepMxaAbM6xWOYiLMvY+SzCpwPKPdH1KnR7uU+KheioEx76Ejfqa/sliYB/nL9VYZ5Corhh8kw==
+  dependencies:
+    babel-plugin-macros "^2.4.5"
+
 parent-module@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/parent-module/-/parent-module-1.0.0.tgz#df250bdc5391f4a085fb589dad761f5ad6b865b5"
@@ -7623,6 +7637,13 @@ pinkie@^2.0.0:
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/pinkie/-/pinkie-2.0.4.tgz#72556b80cfa0d48a974e80e77248e80ed4f7f870"
   integrity sha1-clVrgM+g1IqXToDnckjoDtT3+HA=
+
+pipeline.macro@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/pipeline.macro/-/pipeline.macro-1.1.0.tgz#642b0130d068fc65aca7722a1fa4cd8a21ce9571"
+  integrity sha512-qQHpSkTBTflbrDJbIIfLYLRiM6xHVO5v8sBCVPE3NWkIWdZwmCX7Str8WR+L1ge7LhLeLtfBvrsfCm+QFmwYSA==
+  dependencies:
+    babel-plugin-macros "^2.0.0"
 
 pkg-dir@^1.0.0:
   version "1.0.0"
