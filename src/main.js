@@ -93,6 +93,7 @@ export function useAppModel() {
   const [model, setModel] = useState(() => {
     const def = {
       zipper: LineZipper.initial,
+      isEditing: false,
     }
 
     return compose(
