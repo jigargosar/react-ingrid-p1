@@ -154,8 +154,8 @@ export function useAppModel() {
 
   useEffect(() => {
     const prevModel = prevModelRef.current
-    if (!equals(prevModel, model)) {
-      console.log('model changed')
+    if (!equals(prevModel.zipper, model.zipper)) {
+      console.log('zipper changed')
       prevModel.current = model
     }
   }, [model])
