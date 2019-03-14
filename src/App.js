@@ -24,9 +24,9 @@ function TitleLine({ title, icon, isSelected, isEditing, onTitleChange }) {
   return (
     <div className="flex code ph2">
       <IconContainer>{icon}</IconContainer>
-      <input
+      <textarea
         ref={titleRef}
-        className={`di ph2 ma0 bw0 br2 lh-copy outline-0 ${
+        className={`dib ph2 ma0 bw0 br2 lh-solid outline-0 resize-none ${
           isSelected ? 'bg-blue white' : 'bg-transparent color-inherit'
         }`}
         tabIndex={isSelected ? 0 : null}
