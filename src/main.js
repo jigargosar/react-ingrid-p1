@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from 'react'
-import * as R from 'ramda'
 import { getCached, setCache } from './cache-helpers'
 import validate from 'aproba'
 import nanoid from 'nanoid'
@@ -7,9 +6,19 @@ import faker from 'faker'
 import * as Tree from './tree'
 import * as Zipper from './tree-zipper'
 import isHotKey from 'is-hotkey'
+import {
+  assoc,
+  compose,
+  defaultTo,
+  ifElse,
+  lensPath,
+  mergeDeepRight,
+  over,
+  prop,
+} from 'ramda'
 
-const zipperL = R.lensPath(['zipper'])
-const overZipper = R.over(zipperL)
+const zipperL = lensPath(['zipper'])
+const overZipper = over(zipperL)
 
 function useEffects(setModel) {
   return useMemo(
@@ -23,10 +32,10 @@ function useEffects(setModel) {
         setModel(overZipper(Zipper.withRollback(Zipper.prev)))
       },
       collapseOrPrev() {
-        setModel(overZipper(Zipper.mapDatum(R.assoc('collapsed', true))))
+        setModel(overZipper(Zipper.mapDatum(assoc('collapsed', true))))
       },
       expandOrNext() {
-        setModel(overZipper(Zipper.mapDatum(R.assoc('collapsed', false))))
+        setModel(overZipper(Zipper.mapDatum(assoc('collapsed', false))))
       },
       newLineZ: () => {
         const node = {
@@ -39,7 +48,7 @@ function useEffects(setModel) {
 
         return setModel(
           overZipper(
-            R.ifElse(
+            ifElse(
               z => Zipper.root(z) === z,
               Zipper.appendChildGoR(tree),
               Zipper.appendGoR(tree),
@@ -65,10 +74,10 @@ export function useAppModel() {
       zipper: Zipper.singleton(Tree.fromDatum(root)),
     }
 
-    return R.compose(
-      // R.tap(console.log),
-      R.mergeDeepRight(def),
-      R.defaultTo({}),
+    return compose(
+      // tap(console.log),
+      mergeDeepRight(def),
+      defaultTo({}),
       getCached,
     )('app-model')
   })
@@ -108,4 +117,11 @@ export function useAppModel() {
 
   const effects = useEffects(setModel)
   return [model, effects]
+}
+
+export function getSelectedId(model) {
+  return compose(
+    prop('id'),
+    Zipper.datum,
+  )(model.zipper)
 }

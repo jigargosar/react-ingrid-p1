@@ -1,15 +1,12 @@
 import React from 'react'
-import { useAppModel } from './main'
+import { getSelectedId, useAppModel } from './main'
 import validate from 'aproba'
 import * as Zipper from './tree-zipper'
 import * as Tree from './tree'
 import * as R from 'ramda'
 
 function RootZipper({ model, effects }) {
-  const selectedId = R.compose(
-    R.prop('id'),
-    Zipper.datum,
-  )(model.zipper)
+  const selectedId = getSelectedId(model)
 
   function renderTitle(node) {
     validate('O', arguments)
