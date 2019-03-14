@@ -150,7 +150,7 @@ export function useAppModel() {
         ['cmd+up', effects.moveL],
         ['cmd+down', effects.moveR],
         ['space', effects.startEditMode],
-        ['enter', effects.newLine],
+        ['enter', effects.newLineAndStartEditing],
         ['delete', effects.deleteLine],
       ]
       const editModeKeyMap = [
