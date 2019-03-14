@@ -38,12 +38,12 @@ function useEffects(setModel) {
       prev() {
         updateZipper(LineZipper.prev)
       },
-      collapseOrPrev() {
+      collapseOrParent() {
         updateZipper(
           ifElse(
             LineZipper.canCollapse,
             LineZipper.collapse,
-            LineZipper.prev,
+            LineZipper.parentWithRollback,
           ),
         )
       },
@@ -104,7 +104,7 @@ export function useAppModel() {
       const keyMap = [
         ['down', effects.next],
         ['up', effects.prev],
-        ['left', effects.collapseOrPrev],
+        ['left', effects.collapseOrParent],
         ['right', effects.expandOrNext],
       ]
 

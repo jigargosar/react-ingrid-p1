@@ -62,3 +62,8 @@ export const prev = Zipper.withRollback(
 export const next = Zipper.withRollback(
   Zipper.findNext(allAncestorsExpanded),
 )
+
+export function parentWithRollback(z) {
+  validate('O', arguments)
+  return Zipper.withRollback(z.parent, z)
+}
