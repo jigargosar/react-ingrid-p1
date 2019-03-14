@@ -5,15 +5,6 @@ import { pipe } from 'ramda'
 
 export const initial = Zipper.singleton(LineTree.initial)
 
-export function hasVisibleChildren(z) {
-  validate('O', arguments)
-  const fn = pipe(
-    Zipper.tree,
-    LineTree.hasVisibleChildren,
-  )
-  return fn(z)
-}
-
 export function hasCollapsedChildren(z) {
   validate('O', arguments)
   const fn = pipe(
@@ -23,7 +14,7 @@ export function hasCollapsedChildren(z) {
   return fn(z)
 }
 
-export function isVisible(z) {
+export function allAncestorsExpanded(z) {
   validate('O', arguments)
 
   return !anyParentCollapsed(z)

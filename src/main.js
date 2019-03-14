@@ -30,12 +30,16 @@ function useEffects(setModel) {
 
       next() {
         updateZipper(
-          Zipper.withRollback(Zipper.findNext(LineZipper.isVisible)),
+          Zipper.withRollback(
+            Zipper.findNext(LineZipper.allAncestorsExpanded),
+          ),
         )
       },
       prev() {
         updateZipper(
-          Zipper.withRollback(Zipper.findPrev(LineZipper.isVisible)),
+          Zipper.withRollback(
+            Zipper.findPrev(LineZipper.allAncestorsExpanded),
+          ),
         )
       },
       collapseOrPrev() {
