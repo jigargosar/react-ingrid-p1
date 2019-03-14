@@ -32,31 +32,33 @@ function TitleLine({ title, icon, isSelected, isEditing, onTitleChange }) {
   return (
     <div className="flex code ph2">
       <IconContainer>{icon}</IconContainer>
-      {isEditing ? (
-        <textarea
-          rows={1}
-          ref={titleRef}
-          className={`flex-grow-1 ma0 pa0 bw0 br2 lh-solid outline-0 resize-none ${
-            isSelected ? 'bg-blue white' : 'bg-transparent color-inherit'
-          }`}
-          style={{ minWidth: 'max-content' }}
-          tabIndex={isSelected ? 0 : null}
-          value={title}
-          onChange={e => onTitleChange(e.target.value)}
-          disabled={!isEditing}
-        />
-      ) : (
-        <div
-          ref={titleRef}
-          className={`pre flex-grow-1 ma0 pa0  bw0 br2 lh-solid outline-0 ${
-            isSelected ? 'bg-blue white' : 'bg-transparent color-inherit'
-          }`}
-          style={{ minWidth: 'max-content' }}
-          tabIndex={isSelected ? 0 : null}
-        >
-          {title}
-        </div>
-      )}
+      <div
+        className={`${
+          isSelected ? 'bg-blue white' : 'bg-transparent color-inherit'
+        }`}
+      >
+        {isEditing ? (
+          <textarea
+            rows={1}
+            ref={titleRef}
+            className={`flex-grow-1 ma0 pa0 bw0 br2 lh-solid outline-0 resize-none`}
+            style={{ minWidth: 'max-content' }}
+            tabIndex={isSelected ? 0 : null}
+            value={title}
+            onChange={e => onTitleChange(e.target.value)}
+            disabled={!isEditing}
+          />
+        ) : (
+          <div
+            ref={titleRef}
+            className={`pre flex-grow-1 ma0 pa0  bw0 br2 lh-solid outline-0`}
+            style={{ minWidth: 'max-content' }}
+            tabIndex={isSelected ? 0 : null}
+          >
+            {title}
+          </div>
+        )}
+      </div>
     </div>
   )
 }
