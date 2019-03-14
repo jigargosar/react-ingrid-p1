@@ -75,7 +75,14 @@ function useEffects(setModel) {
         )
       },
       startEditMode() {
-        setModel(assoc('editMode', true))
+        setModel(m => {
+          const nm = assoc('editMode', true, m)
+          console.log(`m, nm`, m, nm)
+          return nm
+        })
+      },
+      stopEditMode() {
+        setModel(assoc('editMode', false))
       },
       onTitleChange(newTitle) {
         updateZipper(LineZipper.setTitle(newTitle))
@@ -118,6 +125,7 @@ export function useAppModel() {
 
   useEffect(() => {
     setCache('app-model', model)
+    window.m = model
   }, [model])
 
   useEffect(() => {
@@ -134,6 +142,7 @@ export function useAppModel() {
         ['cmd+up', effects.moveL],
         ['cmd+down', effects.moveR],
         ['space', effects.startEditMode],
+        [['cmd+enter', 'esc'], effects.stopEditMode],
       ]
 
       createHotKeyHandler(keyMap)(e)
