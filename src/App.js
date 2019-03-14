@@ -12,7 +12,7 @@ function IconContainer(props) {
   )
 }
 
-function TitleLine({ title, icon, isSelected, isEditing }) {
+function TitleLine({ title, icon, isSelected, isEditing, onTitleChange }) {
   const titleRef = useRef()
 
   useEffect(() => {
@@ -34,12 +34,13 @@ function TitleLine({ title, icon, isSelected, isEditing }) {
         // onClick={() => effects.newLineZ(node.id)}
         disabled={!isEditing}
         value={title}
+        onChange={e => onTitleChange(e.target.value)}
       />
     </div>
   )
 }
 
-function LineTreeView({ level, tree, selectedId, isEditMode }) {
+function LineTreeView({ level, tree, selectedId, isEditMode, effects }) {
   const selected = LineTree.idEq(selectedId, tree)
   return (
     <>
@@ -53,19 +54,20 @@ function LineTreeView({ level, tree, selectedId, isEditMode }) {
             title: LineTree.title(tree),
             isSelected: selected,
             isEditing: isEditMode && selected,
+            onTitleChange: effects.onTitleChange,
           }}
         />
       </div>
       {LineTree.visibleChildren(tree).map(childTree => (
         <LineTreeView
           key={LineTree.id(childTree)}
-          {...{ level: level + 1, tree: childTree, selectedId }}
+          {...{ level: level + 1, tree: childTree, selectedId, effects }}
         />
       ))}
     </>
   )
 }
-function RootZipper({ model }) {
+function RootZipper({ model, effects }) {
   return (
     <LineTreeView
       {...{
@@ -73,6 +75,7 @@ function RootZipper({ model }) {
         tree: Zipper.rootTree(model.zipper),
         selectedId: getSelectedId(model),
         isEditMode: getIsEditMode(model),
+        effects,
       }}
     />
   )
