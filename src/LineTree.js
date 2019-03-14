@@ -69,9 +69,11 @@ export function title(tree) {
 }
 
 export function visibleChildren(tree) {
+  validate('O', arguments)
   return collapsedProp(tree) ? [] : Tree.children(tree)
 }
 
-export function isVisible(tree) {
-  return true
+export function hasVisibleChildren(tree) {
+  validate('O', arguments)
+  return canCollapse(tree)
 }

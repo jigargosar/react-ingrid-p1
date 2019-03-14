@@ -33,7 +33,7 @@ function useEffects(setModel) {
       prev() {
         const pred = pipe(
           Zipper.tree,
-          LineTree.isVisible,
+          LineTree.hasVisibleChildren,
         )
         const fn = Zipper.withRollback(Zipper.findPrev(pred))
         setModel(overZipper(fn))
