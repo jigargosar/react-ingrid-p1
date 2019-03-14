@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import { getSelectedId, useAppModel } from './main'
 import validate from 'aproba'
 import * as Zipper from './TreeZipper'
@@ -6,14 +6,24 @@ import * as R from 'ramda'
 import * as LineTree from './LineTree'
 
 function TitleLine({ title, icon, isSelected }) {
+  const titleRef = useRef()
+
+  useEffect(() => {
+    const el = titleRef.current
+    if (el && isSelected) {
+      el.focus()
+    }
+  }, [isSelected])
+
   return (
     <div className="flex code ph2">
       <div className=" flex items-center w1">{icon}</div>
       <div
+        ref={titleRef}
         className={`br1 lh-copy ph2 ${
           isSelected ? 'bg-light-blue white' : ''
         }`}
-        // tabIndex={isSelected ? 0 : null}
+        tabIndex={isSelected ? 0 : null}
         // onClick={() => effects.newLineZ(node.id)}
       >
         {title}
