@@ -12,16 +12,19 @@ describe('LineZipper', function() {
       LineZipper.initial,
     )
 
-    expect(Zipper.tree(z)).toMatchInlineSnapshot(`
+    expect(Zipper.datum(z)).toMatchInlineSnapshot(
+      {
+        title: expect.any(String),
+        id: expect.any(String),
+      },
+      `
 Object {
-  "children": Array [],
-  "datum": Object {
-    "childIds": Array [],
-    "collapsed": false,
-    "id": "n_Kue3CMPj-RP144SXJ32OK",
-    "title": "Boyle",
-  },
+  "childIds": Array [],
+  "collapsed": false,
+  "id": Any<String>,
+  "title": Any<String>,
 }
-`)
+`,
+    )
   })
 })
