@@ -96,10 +96,7 @@ function useEffects(setModel) {
               stopEditMode,
             )(m)
           } else {
-            return compose(
-              stopEditMode,
-              newLine(),
-            )(m)
+            return newLine()(m)
           }
         })
       },
