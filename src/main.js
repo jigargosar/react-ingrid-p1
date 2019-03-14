@@ -8,6 +8,8 @@ import * as Zipper from './tree-zipper'
 import isHotKey from 'is-hotkey'
 import {
   assoc,
+  both,
+  complement,
   compose,
   defaultTo,
   ifElse,
@@ -74,12 +76,12 @@ function treeCollapsedProp(tree) {
 
 export function canExpandTree(tree) {
   validate('O', arguments)
-  return Tree.hasChildren(tree) && treeCollapsedProp(tree) === true
+  return Tree.hasChildren(tree) && treeCollapsedProp(tree)
 }
 
 export function canCollapseTree(tree) {
   validate('O', arguments)
-  return Tree.hasChildren(tree) && treeCollapsedProp(tree) === false
+  return both(Tree.hasChildren, complement(treeCollapsedProp))(tree)
 }
 
 export function useAppModel() {
