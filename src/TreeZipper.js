@@ -197,3 +197,14 @@ export function findPrev(pred) {
     return pred(nz) ? nz : findPrevInner(nz)
   }
 }
+
+export function findNext(pred) {
+  validate('F', arguments)
+
+  return function findNextInner(z) {
+    validate('O', arguments)
+    const nz = next(z)
+    if (!nz) return null
+    return pred(nz) ? nz : findNextInner(nz)
+  }
+}

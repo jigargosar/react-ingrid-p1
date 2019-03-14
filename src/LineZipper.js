@@ -3,14 +3,6 @@ import * as Zipper from './TreeZipper'
 import * as LineTree from './LineTree'
 import { either, ifElse, isNil, pipe, T } from 'ramda'
 
-export { Zipper as Z, LineTree as LT }
-
-export function foo() {
-  validate('O', arguments)
-
-  return 1
-}
-
 function hasVisibleChildren(z) {
   validate('O', arguments)
   const fn = pipe(

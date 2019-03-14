@@ -31,7 +31,9 @@ function useEffects(setModel) {
       log: msg => console.log(msg),
 
       next() {
-        updateZipper(Zipper.withRollback(Zipper.next))
+        updateZipper(
+          Zipper.withRollback(Zipper.findNext(LineZipper.isVisible)),
+        )
       },
       prev() {
         updateZipper(
