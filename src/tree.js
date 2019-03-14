@@ -1,6 +1,14 @@
 import validate from 'aproba'
-import * as R from 'ramda'
-import { curry, lensPath, over } from 'ramda'
+import {
+  append,
+  assoc,
+  curry,
+  isEmpty,
+  lensPath,
+  not,
+  over,
+  pipe,
+} from 'ramda'
 
 export function fromDatum(datum) {
   validate('*', arguments)
@@ -9,15 +17,15 @@ export function fromDatum(datum) {
 
 export function appendChild(child, parent) {
   validate('OO', arguments)
-  return R.over(R.lensPath(['children']), R.append(child))(parent)
+  return over(lensPath(['children']), append(child))(parent)
 }
 
-export const replaceChildren = R.curry(function replaceChildren(
+export const replaceChildren = curry(function replaceChildren(
   newChildren,
   t,
 ) {
   validate('AO', arguments)
-  return R.assoc('children')(newChildren)(t)
+  return assoc('children')(newChildren)(t)
 })
 
 export function datum(t) {
@@ -35,3 +43,24 @@ export const mapDatum = curry(function mapDatum(fn, t) {
   validate('FO', arguments)
   return overDatum(fn)(t)
 })
+
+const isLeaf_ = pipe(
+  children,
+  isEmpty,
+)
+
+export function isLeaf(tree) {
+  validate('O', arguments)
+
+  return isLeaf_(tree)
+}
+
+const hasChildren_ = pipe(
+  isLeaf,
+  not,
+)
+
+export function hasChildren(tree) {
+  validate('O', arguments)
+  return hasChildren_(tree)
+}

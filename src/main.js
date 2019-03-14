@@ -61,6 +61,12 @@ function useEffects(setModel) {
   )
 }
 
+function canExpandTree(tree) {
+  validate('O', arguments)
+  const node = Tree.datum(tree)
+  return Tree.isLeaf(tree)
+}
+
 export function useAppModel() {
   const [model, setModel] = useState(() => {
     const root = {
