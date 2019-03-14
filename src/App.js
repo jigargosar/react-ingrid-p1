@@ -28,7 +28,7 @@ function TitleLine({ title, icon, isSelected }) {
       <div
         ref={titleRef}
         className={`outline-0 br1 lh-copy ph2 ${
-          isSelected ? 'bg-light-blue white' : ''
+          isSelected ? 'bg-blue white' : ''
         }`}
         tabIndex={isSelected ? 0 : null}
         // onClick={() => effects.newLineZ(node.id)}
