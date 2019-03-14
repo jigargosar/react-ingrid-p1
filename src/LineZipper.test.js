@@ -1,10 +1,7 @@
-import * as Tree from './Tree'
 import * as LineZipper from './LineZipper'
 
 describe('LineZipper', function() {
-  it('should do something', function() {
-    const tree = Tree.fromDatum('a')
-    expect(Tree.datum(tree)).toBe('a')
+  it('should have initial value', function() {
     const z = LineZipper.initial
     expect(z).toBeDefined()
   })
