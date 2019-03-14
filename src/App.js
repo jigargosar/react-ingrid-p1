@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useRef } from 'react'
+import React, { useLayoutEffect, useRef } from 'react'
 import { getIsEditMode, getSelectedId, useAppModel } from './main'
 import * as Zipper from './TreeZipper'
 import * as LineTree from './LineTree'
@@ -28,7 +28,7 @@ function TitleLine({ title, icon, isSelected, isEditing, onTitleChange }) {
       el.style.height = el.scrollHeight + 'px'
     }
   }
-  useEffect(resizeHeight, [title, isEditing])
+  useLayoutEffect(resizeHeight, [title, isEditing])
   return (
     <div className="flex code ph2">
       <IconContainer>{icon}</IconContainer>
@@ -36,7 +36,7 @@ function TitleLine({ title, icon, isSelected, isEditing, onTitleChange }) {
         <textarea
           rows={1}
           ref={titleRef}
-          className={`flex-grow-1 ma0 ph2 bw0 br2 lh-copy outline-0 resize-none ${
+          className={`flex-grow-1 ma0 pa0 bw0 br2 lh-title outline-0 resize-none ${
             isSelected ? 'bg-blue white' : 'bg-transparent color-inherit'
           }`}
           style={{ minWidth: 'max-content' }}
@@ -48,7 +48,7 @@ function TitleLine({ title, icon, isSelected, isEditing, onTitleChange }) {
       ) : (
         <div
           ref={titleRef}
-          className={`pre-pre break-word flex-grow-1 ma0 ph2 bw0 br2 lh-copy outline-0 ${
+          className={`pre flex-grow-1 ma0 pa0  bw0 br2 lh-title outline-0 ${
             isSelected ? 'bg-blue white' : 'bg-transparent color-inherit'
           }`}
           style={{ minWidth: 'max-content' }}
