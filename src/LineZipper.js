@@ -68,12 +68,16 @@ export function parentWithRollback(z) {
   return Zipper.withRollback(Zipper.parent, z)
 }
 
-export function nest(z) {
+export function indent(z) {
   validate('O', arguments)
   const ps = Zipper.prevSibling(z)
   if (ps) {
-    pipe(Zipper.removeGoL)
+    const indent_ = pipe(
+      Zipper.removeGoL,
+      expand,
+      Zipper.appendChildGoR(Zipper.tree(z)),
+    )
+    return indent_(z)
   }
-
   return z
 }
