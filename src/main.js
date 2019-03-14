@@ -14,7 +14,6 @@ import {
   lensPath,
   mergeDeepRight,
   over,
-  pathOr,
   prop,
 } from 'ramda'
 
@@ -62,12 +61,12 @@ function useEffects(setModel) {
   )
 }
 
-function nodeCollapsedProp(node) {
+function canExpandTree(tree) {
   validate('O', arguments)
-  return pathOr(null, ['collapsed'], node)
+  return Tree.hasChildren(tree) && Tree.datum(tree).collapsed === true
 }
 
-function canExpandTree(tree) {
+function canCollapseTree(tree) {
   validate('O', arguments)
   return Tree.hasChildren(tree) && Tree.datum(tree).collapsed === false
 }
