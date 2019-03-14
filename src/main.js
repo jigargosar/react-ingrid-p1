@@ -79,9 +79,7 @@ export function canExpandTree(tree) {
 
 export function canCollapseTree(tree) {
   validate('O', arguments)
-  return (
-    Tree.hasChildren(tree) && treeCollapsedProp(tree).collapsed === false
-  )
+  return Tree.hasChildren(tree) && treeCollapsedProp(tree) === false
 }
 
 export function useAppModel() {
