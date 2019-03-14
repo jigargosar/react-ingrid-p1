@@ -5,9 +5,7 @@ import * as Zipper from './TreeZipper'
 import * as R from 'ramda'
 import * as LineTree from './LineTree'
 
-function renderTitleLine({ tree, isSelected }) {
-  validate('O', arguments)
-
+function TitleLine({ tree, isSelected }) {
   return (
     <div className="flex code ph2">
       <div className=" flex items-center w1">
@@ -36,10 +34,12 @@ function RootZipper({ model }) {
         key={LineTree.id(tree)}
         style={{ paddingLeft: `${level * 1.5}rem` }}
       >
-        {renderTitleLine({
-          tree,
-          isSelected: LineTree.treeIdEq(selectedId, tree),
-        })}
+        <TitleLine
+          {...{
+            tree,
+            isSelected: LineTree.treeIdEq(selectedId, tree),
+          }}
+        />
       </div>,
       ...LineTree.visibleChildren(tree).map(childNode =>
         renderNodeTree(level + 1, childNode),
