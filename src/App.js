@@ -5,12 +5,10 @@ import * as Zipper from './TreeZipper'
 import * as R from 'ramda'
 import * as LineTree from './LineTree'
 
-function TitleLine({ tree, isSelected }) {
+function TitleLine({ title, icon, isSelected }) {
   return (
     <div className="flex code ph2">
-      <div className=" flex items-center w1">
-        {LineTree.expandIcon(tree)}
-      </div>
+      <div className=" flex items-center w1">{icon}</div>
       <div
         className={`br1 lh-copy ph2 ${
           isSelected ? 'bg-light-blue white' : ''
@@ -18,7 +16,7 @@ function TitleLine({ tree, isSelected }) {
         // tabIndex={isSelected ? 0 : null}
         // onClick={() => effects.newLineZ(node.id)}
       >
-        {LineTree.title(tree)}
+        {title}
       </div>
     </div>
   )
@@ -37,6 +35,8 @@ function RootZipper({ model }) {
         <TitleLine
           {...{
             tree,
+            icon: LineTree.expandIcon(tree),
+            title: LineTree.title(tree),
             isSelected: LineTree.treeIdEq(selectedId, tree),
           }}
         />
