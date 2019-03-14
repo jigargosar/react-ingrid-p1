@@ -4,25 +4,22 @@ import validate from 'aproba'
 import * as Zipper from './TreeZipper'
 import isHotKey from 'is-hotkey'
 import {
+  append,
   assoc,
   compose,
+  cond,
   defaultTo,
-  find,
   identity,
   ifElse,
-  isNil,
   lensPath,
+  map,
   mergeDeepRight,
-  nth,
   over,
-  pipe,
   prop,
-  unless,
+  T,
 } from 'ramda'
 import * as LineZipper from './LineZipper'
 import * as LineTree from './LineTree'
-import pipeline from 'pipeline.macro'
-import { _ } from 'param.macro'
 
 const zipperL = lensPath(['zipper'])
 const overZipper = over(zipperL)
@@ -100,41 +97,21 @@ export function useAppModel() {
         ['right', effects.expandOrNext],
       ]
 
-      const fst = nth(0)
-      const snd = nth(1)
-      const handler = pipeline(
-        keyMap,
-        find(
-          pipe(
-            fst,
-            isHotKey(_, e),
-          ),
-        ),
-        unless(isNil, snd),
-        defaultTo(identity),
+      const createEventHandler = compose(
+        cond,
+        append([T, identity]),
+        map((k, f) => [
+          isHotKey(k),
+          e => {
+            f()
+            e.preventDefault()
+          },
+        ]),
       )
 
-      if (isHotKey('down')(e)) {
-        e.preventDefault()
-        effects.next()
-        console.assert(handler === effects.next)
-      }
-      if (isHotKey('up')(e)) {
-        e.preventDefault()
-        effects.prev()
-      }
-      if (isHotKey('left')(e)) {
-        e.preventDefault()
-        effects.collapseOrPrev()
-      }
-      if (isHotKey('right')(e)) {
-        e.preventDefault()
-        effects.expandOrNext()
-      }
-      if (isHotKey('enter')(e)) {
-        e.preventDefault()
-        effects.newLine()
-      }
+      const eventHandler = createEventHandler(keyMap)
+
+      eventHandler(e)
     }
 
     window.addEventListener('keydown', listener)
