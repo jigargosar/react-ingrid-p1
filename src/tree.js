@@ -32,6 +32,7 @@ export function datum(t) {
   validate('O', arguments)
   return t.datum
 }
+
 export function children(t) {
   validate('O', arguments)
   return t.children
