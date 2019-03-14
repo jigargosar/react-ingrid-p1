@@ -14,7 +14,7 @@ function IconContainer(props) {
 
 function TitleLine({ title, icon, isSelected, isEditing, onTitleChange }) {
   const titleRef = useRef()
-
+  console.log(`isEditing`, isEditing)
   useEffect(() => {
     const el = titleRef.current
     if (el && isSelected) {
@@ -40,7 +40,8 @@ function TitleLine({ title, icon, isSelected, isEditing, onTitleChange }) {
   )
 }
 
-function LineTreeView({ level, tree, selectedId, isEditMode, effects }) {
+function LineTreeView(props) {
+  const { level, tree, selectedId, isEditMode, effects } = props
   const selected = LineTree.idEq(selectedId, tree)
   return (
     <>
@@ -61,7 +62,11 @@ function LineTreeView({ level, tree, selectedId, isEditMode, effects }) {
       {LineTree.visibleChildren(tree).map(childTree => (
         <LineTreeView
           key={LineTree.id(childTree)}
-          {...{ level: level + 1, tree: childTree, selectedId, effects }}
+          {...props}
+          {...{
+            level: level + 1,
+            tree: childTree,
+          }}
         />
       ))}
     </>
