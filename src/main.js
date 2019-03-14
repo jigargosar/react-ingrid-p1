@@ -89,11 +89,16 @@ const createHotKeyHandler = compose(
   ]),
 )
 
+function isEditMode(model) {
+  validate('O', arguments)
+  return model.editMode
+}
+
 export function useAppModel() {
   const [model, setModel] = useState(() => {
     const def = {
       zipper: LineZipper.initial,
-      isEditing: false,
+      editMode: false,
     }
 
     return compose(
