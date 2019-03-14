@@ -20,7 +20,7 @@ function TitleLine({ title, icon, isSelected }) {
       <div className=" flex items-center w1">{icon}</div>
       <div
         ref={titleRef}
-        className={`br1 lh-copy ph2 ${
+        className={`outline-0 br1 lh-copy ph2 ${
           isSelected ? 'bg-light-blue white' : ''
         }`}
         tabIndex={isSelected ? 0 : null}
