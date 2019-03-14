@@ -3,8 +3,8 @@ import { getCached, setCache } from './cache-helpers'
 import validate from 'aproba'
 import nanoid from 'nanoid'
 import faker from 'faker'
-import * as Tree from './tree'
-import * as Zipper from './tree-zipper'
+import * as Tree from './Tree'
+import * as Zipper from './TreeZipper'
 import isHotKey from 'is-hotkey'
 import {
   assoc,

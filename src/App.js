@@ -6,8 +6,8 @@ import {
   useAppModel,
 } from './main'
 import validate from 'aproba'
-import * as Zipper from './tree-zipper'
-import * as Tree from './tree'
+import * as Zipper from './TreeZipper'
+import * as Tree from './Tree'
 import * as R from 'ramda'
 import { always, cond, T } from 'ramda'
 

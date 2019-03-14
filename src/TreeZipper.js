@@ -1,7 +1,7 @@
 import validate from 'aproba'
 import * as R from 'ramda'
 import { compose, curry, ifElse, isNil, when } from 'ramda'
-import * as Tree from './tree'
+import * as Tree from './Tree'
 
 export function singleton(tree) {
   validate('O', arguments)
