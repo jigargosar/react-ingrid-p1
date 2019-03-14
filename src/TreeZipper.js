@@ -235,11 +235,20 @@ export function removeGoUp(z) {
       crumbs: tail(z.crumbs),
     }
   }
+}
 
-  // const pz = parent(z)
-  // if(!pz) return null
-  //
-  // return { ...z, left: init(z.left), center: last(z.left) }
+export function moveL(z) {
+  if (isEmpty(z.left)) return null
+  return { ...z, left: init(z.left), right: [last(z.left), ...z.right] }
+}
+
+export function moveR(z) {
+  if (isEmpty(z.right)) return null
+  return {
+    ...z,
+    left: [...z.left, head(z.right)],
+    right: tail(z.right),
+  }
 }
 
 export function findPrev(pred) {

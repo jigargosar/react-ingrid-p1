@@ -94,3 +94,15 @@ export function outdent(z) {
   }
   return z
 }
+
+export function moveL(z) {
+  validate('O', arguments)
+
+  return Zipper.withRollback(Zipper.moveL, z)
+}
+
+export function moveR(z) {
+  validate('O', arguments)
+
+  return Zipper.withRollback(Zipper.moveR, z)
+}

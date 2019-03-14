@@ -50,6 +50,12 @@ function useEffects(setModel) {
           ifElse(LineZipper.canExpand, LineZipper.expand, LineZipper.next),
         )
       },
+      moveL() {
+        updateZipper(LineZipper.moveL)
+      },
+      moveR() {
+        updateZipper(LineZipper.moveR)
+      },
       indent() {
         updateZipper(LineZipper.indent)
       },
@@ -112,6 +118,8 @@ export function useAppModel() {
         ['right', effects.expandOrNext],
         ['tab', effects.indent],
         ['shift+tab', effects.outdent],
+        ['cmd+up', effects.moveL],
+        ['cmd+down', effects.moveR],
       ]
 
       createHotKeyHandler(keyMap)(e)
