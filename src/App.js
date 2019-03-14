@@ -26,8 +26,8 @@ function TitleLine({ title, icon, isSelected, isEditing, onTitleChange }) {
       <IconContainer>{icon}</IconContainer>
       <input
         ref={titleRef}
-        className={`di outline-0 br1 lh-copy ph2 bn ${
-          isSelected ? 'bg-blue white' : ''
+        className={`di ph2 ma0 bw0 br2 lh-copy outline-0 ${
+          isSelected ? 'bg-blue white' : 'bg-transparent color-inherit'
         }`}
         tabIndex={isSelected ? 0 : null}
         // onClick={() => effects.newLineZ(node.id)}
