@@ -67,3 +67,7 @@ export function title(tree) {
   validate('O', arguments)
   return datumProp('title', tree)
 }
+
+export function visibleChildren(tree) {
+  return collapsedProp(tree) ? [] : Tree.children(tree)
+}

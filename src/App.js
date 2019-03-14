@@ -2,13 +2,8 @@ import React from 'react'
 import { getSelectedId, useAppModel } from './main'
 import validate from 'aproba'
 import * as Zipper from './TreeZipper'
-import * as Tree from './Tree'
 import * as R from 'ramda'
 import * as LineTree from './LineTree'
-
-function visibleChildren(tree) {
-  return LineTree.collapsedProp(tree) ? [] : Tree.children(tree)
-}
 
 function RootZipper({ model }) {
   const selectedId = getSelectedId(model)
@@ -41,7 +36,7 @@ function RootZipper({ model }) {
       >
         {renderTitleLine(tree)}
       </div>,
-      ...visibleChildren(tree).map(childNode =>
+      ...LineTree.visibleChildren(tree).map(childNode =>
         renderNodeTree(level + 1, childNode),
       ),
     ]
