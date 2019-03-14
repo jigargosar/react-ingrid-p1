@@ -1,48 +1,51 @@
 import validate from 'aproba'
-import { always, both, complement, compose, cond, T } from 'ramda'
-import { collapsedProp } from './Line'
+import { always, both, complement, compose, cond, propOr, T } from 'ramda'
 import * as Tree from './Tree'
 
-function treeCollapsedProp(tree) {
+const lineCollapsedProp = propOr(false, 'collapsed')
+
+const datum = Tree.datum
+
+function collapsedProp(tree) {
   validate('O', arguments)
   return compose(
-    collapsedProp,
-    Tree.datum,
+    lineCollapsedProp,
+    datum,
   )(tree)
 }
 
-const treeHasChildrenAnd = both(Tree.hasChildren)
+const hasChildrenAnd = both(Tree.hasChildren)
 
-function canExpandTree(tree) {
+function canExpand(tree) {
   validate('O', arguments)
-  return treeHasChildrenAnd(treeCollapsedProp)(tree)
+  return hasChildrenAnd(collapsedProp)(tree)
 }
 
-function canCollapseTree(tree) {
+function canCollapse(tree) {
   validate('O', arguments)
-  return treeHasChildrenAnd(complement(treeCollapsedProp))(tree)
+  return hasChildrenAnd(complement(collapsedProp))(tree)
 }
 
-export function treeExpandIcon(tree) {
+export function expandIcon(tree) {
   validate('O', arguments)
   return cond([
-    [canExpandTree, always('+')],
-    [canCollapseTree, always('-')],
+    [canExpand, always('+')],
+    [canCollapse, always('-')],
     [T, always(' ')],
   ])(tree)
 }
 
-export function treeId(tree) {
+export function id(tree) {
   validate('O', arguments)
-  return Tree.datum(tree).id
+  return datum(tree).id
 }
 
-export function treeIdEq(id, tree) {
+export function treeIdEq(id_, tree) {
   validate('SO', arguments)
-  return Tree.datum(tree).id === id
+  return id(tree) === id_
 }
 
-export function treeTitle(tree) {
+export function title(tree) {
   validate('O', arguments)
-  return Tree.datum(tree).title
+  return datum(tree).title
 }

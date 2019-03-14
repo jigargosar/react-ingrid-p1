@@ -15,14 +15,14 @@ function RootZipper({ model }) {
     return (
       <div className="flex code">
         <div className="ph2 flex items-center w1">
-          {LineTree.treeExpandIcon(tree)}
+          {LineTree.expandIcon(tree)}
         </div>
         <div
           className={`pa2 ${isSelected ? 'bg-light-blue white' : ''}`}
           // tabIndex={isSelected ? 0 : null}
           // onClick={() => effects.newLineZ(node.id)}
         >
-          {LineTree.treeTitle(tree)}
+          {LineTree.title(tree)}
         </div>
       </div>
     )
@@ -32,7 +32,7 @@ function RootZipper({ model }) {
     validate('NO', arguments)
     return [
       <div
-        key={LineTree.treeId(tree)}
+        key={LineTree.id(tree)}
         style={{ paddingLeft: `${level * 1.5}rem` }}
       >
         {renderTitleLine(tree)}
