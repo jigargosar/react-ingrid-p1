@@ -109,8 +109,7 @@ export function useAppModel() {
         ['right', effects.expandOrNext],
       ]
 
-      const hotKeyHandler = createHotKeyHandler(keyMap)
-      hotKeyHandler(e)
+      createHotKeyHandler(keyMap)(e)
     }
 
     window.addEventListener('keydown', listener)
