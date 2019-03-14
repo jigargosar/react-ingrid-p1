@@ -173,7 +173,7 @@ export function useAppModel() {
 
   function undo() {
     const lastHistoryItem = last(history)
-    console.log(`lastHistoryItem`, history)
+    console.log(`history`, history)
     if (lastHistoryItem) {
       setModel(overZipper(always(lastHistoryItem)))
       setHistory(init(history))
