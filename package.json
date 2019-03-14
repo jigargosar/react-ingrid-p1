@@ -17,7 +17,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --notify",
+    "test": "react-scripts test --notify=true --notifyMode=failure-change",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
