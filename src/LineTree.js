@@ -1,17 +1,35 @@
 import validate from 'aproba'
-import { always, both, complement, compose, cond, propOr, T } from 'ramda'
+import {
+  always,
+  both,
+  complement,
+  cond,
+  pipe,
+  prop,
+  propOr,
+  T,
+} from 'ramda'
 import * as Tree from './Tree'
-
-const lineCollapsedProp = propOr(false, 'collapsed')
 
 const datum = Tree.datum
 
+function datumProp(pn, tree) {
+  validate('SO', arguments)
+  const datumProp_ = pipe(
+    datum,
+    prop(pn),
+  )
+  return datumProp_(tree)
+}
+
+function datumPropOr(def, pn, tree) {
+  validate('*SO', arguments)
+  return propOr(def, pn, tree)
+}
+
 function collapsedProp(tree) {
   validate('O', arguments)
-  return compose(
-    lineCollapsedProp,
-    datum,
-  )(tree)
+  return datumPropOr(false, 'collapsed', tree)
 }
 
 const hasChildrenAnd = both(Tree.hasChildren)
@@ -37,7 +55,7 @@ export function expandIcon(tree) {
 
 export function id(tree) {
   validate('O', arguments)
-  return datum(tree).id
+  return datumProp('id', tree)
 }
 
 export function treeIdEq(id_, tree) {
@@ -47,5 +65,5 @@ export function treeIdEq(id_, tree) {
 
 export function title(tree) {
   validate('O', arguments)
-  return datum(tree).title
+  return datumProp('title', tree)
 }
