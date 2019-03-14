@@ -21,19 +21,30 @@ function TitleLine({ title, icon, isSelected, isEditing, onTitleChange }) {
     }
   }, [isSelected, isEditing, titleRef.current])
 
+  function resizeHeight() {
+    const el = titleRef.current
+    if (el) {
+      el.style.height = ''
+      el.style.height = el.scrollHeight + 'px'
+    }
+  }
   return (
     <div className="flex code ph2">
       <IconContainer>{icon}</IconContainer>
       <textarea
+        rows={1}
         ref={titleRef}
-        className={`dib ph2 ma0 bw0 br2 lh-solid outline-0 resize-none ${
+        className={`dib ma0 bw0 br2 lh-copy outline-0 resize-none ${
           isSelected ? 'bg-blue white' : 'bg-transparent color-inherit'
         }`}
         tabIndex={isSelected ? 0 : null}
         // onClick={() => effects.newLineZ(node.id)}
         disabled={!isEditing}
         value={title}
-        onChange={e => onTitleChange(e.target.value)}
+        onChange={e => {
+          resizeHeight()
+          return onTitleChange(e.target.value)
+        }}
       />
     </div>
   )
