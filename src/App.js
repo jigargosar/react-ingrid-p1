@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react'
-import { getSelectedId, useAppModel } from './main'
+import { getIsEditMode, getSelectedId, useAppModel } from './main'
 import * as Zipper from './TreeZipper'
 import * as LineTree from './LineTree'
 
@@ -12,7 +12,7 @@ function IconContainer(props) {
   )
 }
 
-function TitleLine({ title, icon, isSelected }) {
+function TitleLine({ title, icon, isSelected, isEditing }) {
   const titleRef = useRef()
 
   useEffect(() => {
@@ -20,26 +20,27 @@ function TitleLine({ title, icon, isSelected }) {
     if (el && isSelected) {
       el.focus()
     }
-  }, [isSelected])
+  }, [isSelected, isEditing, titleRef.current])
 
   return (
     <div className="flex code ph2">
       <IconContainer>{icon}</IconContainer>
-      <div
+      <input
         ref={titleRef}
         className={`outline-0 br1 lh-copy ph2 ${
           isSelected ? 'bg-blue white' : ''
         }`}
         tabIndex={isSelected ? 0 : null}
         // onClick={() => effects.newLineZ(node.id)}
-      >
-        {title}
-      </div>
+        disabled={!isEditing}
+        value={title}
+      />
     </div>
   )
 }
 
-function LineTreeView({ level, tree, selectedId }) {
+function LineTreeView({ level, tree, selectedId, isEditMode }) {
+  const selected = LineTree.idEq(selectedId, tree)
   return (
     <>
       <div
@@ -48,10 +49,10 @@ function LineTreeView({ level, tree, selectedId }) {
       >
         <TitleLine
           {...{
-            tree,
             icon: LineTree.expandIcon(tree),
             title: LineTree.title(tree),
-            isSelected: LineTree.idEq(selectedId, tree),
+            isSelected: selected,
+            isEditing: isEditMode && selected,
           }}
         />
       </div>
@@ -71,6 +72,7 @@ function RootZipper({ model }) {
         level: 0,
         tree: Zipper.rootTree(model.zipper),
         selectedId: getSelectedId(model),
+        isEditMode: getIsEditMode(model),
       }}
     />
   )

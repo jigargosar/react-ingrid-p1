@@ -89,7 +89,7 @@ const createHotKeyHandler = compose(
   ]),
 )
 
-function isEditMode(model) {
+export function getIsEditMode(model) {
   validate('O', arguments)
   return model.editMode
 }
