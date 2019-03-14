@@ -7,14 +7,16 @@
 //body,
 //#main,
 //body > div[data-elm-hot='true'] {
-  //  min-height: 100%;
-  //  overflow: scroll;
-  //}
+//  min-height: 100%;
+//  overflow: scroll;
+//}
 
 //.ws-pre{
-  //  white-space: pre;
-  //}
-
+//  white-space: pre;
+//}
+.ws-pre {
+  white-space: pre;
+}
 .pre-wrap {
   white-space: pre-wrap;
 }
@@ -45,7 +47,6 @@
   position: absolute !important;
   height: unset !important;
 }
-
 
 body {
   margin: 0;
