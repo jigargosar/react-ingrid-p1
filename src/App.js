@@ -28,15 +28,15 @@ function TitleLine({ title, icon, isSelected, isEditing, onTitleChange }) {
       el.style.height = el.scrollHeight + 'px'
     }
   }
-  useEffect(resizeHeight, [title])
+  useEffect(resizeHeight, [title, isEditing])
   return (
     <div className="flex code ph2">
       <IconContainer>{icon}</IconContainer>
-      <div className="">
+      {isEditing ? (
         <textarea
           rows={1}
           ref={titleRef}
-          className={`db ma0 bw0 br2 lh-copy outline-0 resize-none ${
+          className={`flex-grow-1 ma0 pa0 bw0 br2 lh-copy outline-0 resize-none ${
             isSelected ? 'bg-blue white' : 'bg-transparent color-inherit'
           }`}
           style={{ minWidth: 'max-content' }}
@@ -45,7 +45,18 @@ function TitleLine({ title, icon, isSelected, isEditing, onTitleChange }) {
           onChange={e => onTitleChange(e.target.value)}
           disabled={!isEditing}
         />
-      </div>
+      ) : (
+        <div
+          ref={titleRef}
+          className={`pre-wrap  flex-grow-1  ma0 bw0 br2 lh-copy outline-0 ${
+            isSelected ? 'bg-blue white' : 'bg-transparent color-inherit'
+          }`}
+          style={{ minWidth: 'max-content' }}
+          tabIndex={isSelected ? 0 : null}
+        >
+          {title}
+        </div>
+      )}
     </div>
   )
 }
