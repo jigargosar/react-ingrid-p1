@@ -34,7 +34,11 @@ function TitleLine({ title, icon, isSelected, isEditing, onTitleChange }) {
       <IconContainer>{icon}</IconContainer>
       <div
         className={`flex-grow-1 flex br2 ph2 pv1 lh-title ${
-          isSelected ? 'bg-blue white' : 'bg-transparent color-inherit'
+          isEditing
+            ? 'bg-white black-80'
+            : isSelected
+            ? 'bg-blue white'
+            : 'bg-transparent color-inherit'
         }`}
       >
         {isEditing ? (
