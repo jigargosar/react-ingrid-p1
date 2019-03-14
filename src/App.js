@@ -15,7 +15,9 @@ function TitleLine({ title, icon, isSelected }) {
 
   return (
     <div className="flex code ph2">
-      <div className="w1 flex items-center justify-center">{icon}</div>
+      <div className="w1 flex items-center justify-center us-none">
+        {icon}
+      </div>
       <div
         ref={titleRef}
         className={`outline-0 br1 lh-copy ph2 ${
