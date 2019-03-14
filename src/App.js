@@ -54,7 +54,7 @@ function TitleLine({ title, icon, isSelected, isEditing, onTitleChange }) {
         ) : (
           <div
             ref={titleRef}
-            className={`flex-grow-1 pre-line outline-0`}
+            className={`flex-grow-1 pre-wrap outline-0`}
             tabIndex={isSelected ? 0 : null}
           >
             {title}
