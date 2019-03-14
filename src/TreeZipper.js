@@ -55,6 +55,14 @@ export function root(z) {
   return parent_ ? root(parent_) : z
 }
 
+export function rootTree(z) {
+  validate('O', arguments)
+  return compose(
+    tree,
+    root,
+  )(z)
+}
+
 export function tree(z) {
   validate('O', arguments)
   return z.center

@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 import { getSelectedId, useAppModel } from './main'
 import * as Zipper from './TreeZipper'
-import * as R from 'ramda'
 import * as LineTree from './LineTree'
 
 function TitleLine({ title, icon, isSelected }) {
@@ -32,37 +31,36 @@ function TitleLine({ title, icon, isSelected }) {
 }
 
 function LineTreeView({ level, tree, selectedId }) {
-  return [
-    <div
-      key={LineTree.id(tree)}
-      style={{ paddingLeft: `${level * 1.5}rem` }}
-    >
-      <TitleLine
-        {...{
-          tree,
-          icon: LineTree.expandIcon(tree),
-          title: LineTree.title(tree),
-          isSelected: LineTree.treeIdEq(selectedId, tree),
-        }}
-      />
-    </div>,
-    ...LineTree.visibleChildren(tree).map(childTree => (
-      <LineTreeView
-        key={LineTree.id(childTree)}
-        {...{ level: level + 1, tree: childTree, selectedId }}
-      />
-    )),
-  ]
+  return (
+    <>
+      <div
+        key={LineTree.id(tree)}
+        style={{ paddingLeft: `${level * 1.5}rem` }}
+      >
+        <TitleLine
+          {...{
+            tree,
+            icon: LineTree.expandIcon(tree),
+            title: LineTree.title(tree),
+            isSelected: LineTree.treeIdEq(selectedId, tree),
+          }}
+        />
+      </div>
+      {LineTree.visibleChildren(tree).map(childTree => (
+        <LineTreeView
+          key={LineTree.id(childTree)}
+          {...{ level: level + 1, tree: childTree, selectedId }}
+        />
+      ))}
+    </>
+  )
 }
 function RootZipper({ model }) {
   return (
     <LineTreeView
       {...{
         level: 0,
-        tree: R.compose(
-          Zipper.tree,
-          Zipper.root,
-        )(model.zipper),
+        tree: Zipper.rootTree(model.zipper),
         selectedId: getSelectedId(model),
       }}
     />
