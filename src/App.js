@@ -24,17 +24,19 @@ function TitleLine({ title, icon, isSelected, isEditing, onTitleChange }) {
   return (
     <div className="flex code ph2">
       <IconContainer>{icon}</IconContainer>
-      <input
-        ref={titleRef}
-        className={`di ph2 ma0 bw0 br2 lh-copy outline-0 ${
-          isSelected ? 'bg-blue white' : 'bg-transparent color-inherit'
-        }`}
-        tabIndex={isSelected ? 0 : null}
-        // onClick={() => effects.newLineZ(node.id)}
-        disabled={!isEditing}
-        value={title}
-        onChange={e => onTitleChange(e.target.value)}
-      />
+      <div>
+        <input
+          ref={titleRef}
+          className={`di ph2 ma0 bw0 br2 lh-copy outline-0 ${
+            isSelected ? 'bg-blue white' : 'bg-transparent color-inherit'
+          }`}
+          tabIndex={isSelected ? 0 : null}
+          // onClick={() => effects.newLineZ(node.id)}
+          disabled={!isEditing}
+          value={title}
+          onChange={e => onTitleChange(e.target.value)}
+        />
+      </div>
     </div>
   )
 }
