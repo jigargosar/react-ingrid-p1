@@ -30,8 +30,6 @@ function useEffects(setModel) {
     }
 
     return {
-      log: msg => console.log(msg),
-
       next() {
         updateZipper(LineZipper.next)
       },
