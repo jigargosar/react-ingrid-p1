@@ -95,6 +95,14 @@ export function tree(z) {
   return z.center
 }
 
+export function isLeaf(z) {
+  validate('O', arguments)
+  return pipe(
+    tree,
+    Tree.isLeaf,
+  )(z)
+}
+
 export function datum(z) {
   validate('O', arguments)
   return compose(
@@ -245,6 +253,11 @@ export function removeGoUp(z) {
 export function removeGoROrLOrUp(z) {
   validate('O', arguments)
   return removeGoR(z) || removeGoL(z) || removeGoUp(z)
+}
+
+export function removeGoLOrROrUp(z) {
+  validate('O', arguments)
+  return removeGoL(z) || removeGoR(z) || removeGoUp(z)
 }
 
 export function moveL(z) {

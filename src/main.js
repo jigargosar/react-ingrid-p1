@@ -24,6 +24,21 @@ import * as LineTree from './LineTree'
 const zipperL = lensPath(['zipper'])
 const overZipper = over(zipperL)
 
+const stopEditMode = assoc('editMode', false)
+
+function newLine() {
+  const tree = LineTree.newLine()
+  return overZipper(
+    ifElse(
+      Zipper.isRoot,
+      Zipper.appendChildGoR(tree),
+      Zipper.appendGoR(tree),
+    ),
+  )
+}
+
+const startEditMode = assoc('editMode', true)
+
 function useEffects(setModel) {
   return useMemo(() => {
     function updateZipper(uFn) {
@@ -64,32 +79,38 @@ function useEffects(setModel) {
         updateZipper(LineZipper.outdent)
       },
       newLine: () => {
-        const tree = LineTree.newLine()
-
-        updateZipper(
-          ifElse(
-            Zipper.isRoot,
-            Zipper.appendChildGoR(tree),
-            Zipper.appendGoR(tree),
-          ),
-        )
+        setModel(newLine())
       },
-      newLineAndStartEditing: () => {
+      newLineAndStartEditing() {
         effects.newLine()
         effects.startEditMode()
+      },
+      newLineOrDeleteEmptyLeaf() {
+        setModel(m => {
+          const zipper = m.zipper
+          const emptyLeaf = LineZipper.isBlankTitleLeaf(zipper)
+
+          if (emptyLeaf) {
+            return compose(
+              overZipper(LineZipper.deleteBlankTitleLeaf),
+              stopEditMode,
+            )(m)
+          } else {
+            return compose(
+              stopEditMode,
+              newLine(),
+            )(m)
+          }
+        })
       },
       deleteLine: () => {
         updateZipper(LineZipper.deleteLine)
       },
       startEditMode() {
-        setModel(m => {
-          const nm = assoc('editMode', true, m)
-          console.log(`m, nm`, m, nm)
-          return nm
-        })
+        setModel(startEditMode)
       },
       stopEditMode() {
-        setModel(assoc('editMode', false))
+        setModel(stopEditMode)
       },
       onTitleChange(newTitle) {
         updateZipper(LineZipper.setTitle(newTitle))
@@ -157,7 +178,7 @@ export function useAppModel() {
         ['tab', effects.indent],
         ['shift+tab', effects.outdent],
         [['cmd+enter', 'esc'], effects.stopEditMode],
-        ['enter', effects.newLine],
+        ['enter', effects.newLineOrDeleteEmptyLeaf],
       ]
 
       createHotKeyHandler(

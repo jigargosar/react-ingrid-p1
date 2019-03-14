@@ -1,7 +1,7 @@
 import validate from 'aproba'
 import * as Zipper from './TreeZipper'
 import * as LineTree from './LineTree'
-import { assoc, pipe } from 'ramda'
+import { assoc, isEmpty, pipe, trim } from 'ramda'
 
 export const initial = Zipper.singleton(LineTree.initial)
 
@@ -47,10 +47,33 @@ export function canExpand(z) {
   return fn(z)
 }
 
+export function isTitleBlank(z) {
+  validate('O', arguments)
+  const fn = pipe(
+    Zipper.tree,
+    LineTree.title,
+    trim,
+    isEmpty,
+  )
+  return fn(z)
+}
+
+export function isBlankTitleLeaf(z) {
+  validate('O', arguments)
+  return Zipper.isLeaf(z) && isTitleBlank(z)
+}
+
+export function deleteBlankTitleLeaf(z) {
+  validate('O', arguments)
+  if (!isBlankTitleLeaf(z)) return null
+  return Zipper.withRollback(Zipper.removeGoLOrROrUp)(z)
+}
+
 export function collapse(z) {
   validate('O', arguments)
   return Zipper.mapTree(LineTree.collapse)(z)
 }
+
 export function expand(z) {
   return Zipper.mapTree(LineTree.expand)(z)
 }
