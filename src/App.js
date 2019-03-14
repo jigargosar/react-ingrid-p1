@@ -12,12 +12,14 @@ function RootZipper({ model }) {
     validate('O', arguments)
     const isSelected = LineTree.treeIdEq(selectedId, tree)
     return (
-      <div className="flex code">
-        <div className="ph2 flex items-center w1">
+      <div className="flex code ph2">
+        <div className=" flex items-center w1">
           {LineTree.expandIcon(tree)}
         </div>
         <div
-          className={`pa2 ${isSelected ? 'bg-light-blue white' : ''}`}
+          className={`br1 lh-copy ph2 ${
+            isSelected ? 'bg-light-blue white' : ''
+          }`}
           // tabIndex={isSelected ? 0 : null}
           // onClick={() => effects.newLineZ(node.id)}
         >
