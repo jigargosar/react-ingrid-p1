@@ -26,7 +26,7 @@ function TitleLine({ title, icon, isSelected, isEditing, onTitleChange }) {
       <IconContainer>{icon}</IconContainer>
       <input
         ref={titleRef}
-        className={`outline-0 br1 lh-copy ph2 bn ${
+        className={`di outline-0 br1 lh-copy ph2 bn ${
           isSelected ? 'bg-blue white' : ''
         }`}
         tabIndex={isSelected ? 0 : null}
