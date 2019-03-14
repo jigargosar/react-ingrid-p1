@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { getCached, setCache } from './cache-helpers'
 import validate from 'aproba'
 import * as Zipper from './TreeZipper'
@@ -9,6 +9,7 @@ import {
   compose,
   cond,
   defaultTo,
+  equals,
   identity,
   ifElse,
   lensPath,
@@ -148,6 +149,16 @@ export function useAppModel() {
       getCached,
     )('app-model')
   })
+
+  const prevModelRef = useRef(model)
+
+  useEffect(() => {
+    const prevModel = prevModelRef.current
+    if (!equals(prevModel, model)) {
+      console.log('model changed')
+      prevModel.current = model
+    }
+  }, [model])
 
   useEffect(() => {
     setCache('app-model', model)
