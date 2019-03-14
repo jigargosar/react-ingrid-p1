@@ -5,7 +5,6 @@ import * as Zipper from './TreeZipper'
 import isHotKey from 'is-hotkey'
 import {
   append,
-  assoc,
   compose,
   cond,
   defaultTo,
@@ -34,24 +33,24 @@ function useEffects(setModel) {
       log: msg => console.log(msg),
 
       next() {
-        updateZipper(
-          Zipper.withRollback(
-            Zipper.findNext(LineZipper.allAncestorsExpanded),
-          ),
-        )
+        updateZipper(LineZipper.next)
       },
       prev() {
+        updateZipper(LineZipper.prev)
+      },
+      collapseOrPrev() {
         updateZipper(
-          Zipper.withRollback(
-            Zipper.findPrev(LineZipper.allAncestorsExpanded),
+          ifElse(
+            LineZipper.canCollapse,
+            LineZipper.collapse,
+            LineZipper.prev,
           ),
         )
       },
-      collapseOrPrev() {
-        updateZipper(ifElse(LineZipper.canCollapse, LineZipper.collapse))
-      },
       expandOrNext() {
-        updateZipper(Zipper.mapDatum(assoc('collapsed', false)))
+        updateZipper(
+          ifElse(LineZipper.canExpand, LineZipper.expand, LineZipper.next),
+        )
       },
       newLine: () => {
         const tree = LineTree.newLine()

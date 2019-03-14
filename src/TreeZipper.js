@@ -187,6 +187,11 @@ export const mapDatum = curry(function mapDatum(fn, z) {
   return { ...z, center: Tree.mapDatum(fn, z.center) }
 })
 
+export const mapTree = curry(function mapTree(fn, z) {
+  validate('FO', arguments)
+  return { ...z, center: fn(z.center) }
+})
+
 export function findPrev(pred) {
   validate('F', arguments)
 

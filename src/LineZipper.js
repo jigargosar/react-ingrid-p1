@@ -49,17 +49,16 @@ export function canExpand(z) {
 
 export function collapse(z) {
   validate('O', arguments)
-  const fn = pipe(
-    Zipper.tree,
-    LineTree.collapse,
-  )
-  return fn(z)
+  return Zipper.mapTree(LineTree.collapse)(z)
 }
 export function expand(z) {
-  validate('O', arguments)
-  const fn = pipe(
-    Zipper.tree,
-    LineTree.expand,
-  )
-  return fn(z)
+  return Zipper.mapTree(LineTree.expand)(z)
 }
+
+export const prev = Zipper.withRollback(
+  Zipper.findPrev(allAncestorsExpanded),
+)
+
+export const next = Zipper.withRollback(
+  Zipper.findNext(allAncestorsExpanded),
+)
