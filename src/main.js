@@ -1,9 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { getCached, setCache } from './cache-helpers'
 import validate from 'aproba'
-import nanoid from 'nanoid'
-import faker from 'faker'
-import * as Tree from './Tree'
 import * as Zipper from './TreeZipper'
 import isHotKey from 'is-hotkey'
 import {
@@ -17,6 +14,7 @@ import {
   prop,
 } from 'ramda'
 import * as LineZipper from './LineZipper'
+import * as LineTree from './LineTree'
 
 const zipperL = lensPath(['zipper'])
 const overZipper = over(zipperL)
@@ -47,13 +45,7 @@ function useEffects(setModel) {
         updateZipper(Zipper.mapDatum(assoc('collapsed', false)))
       },
       newLineZ: () => {
-        const node = {
-          id: `n_${nanoid()}`,
-          title: faker.name.lastName(),
-          collapsed: false,
-          childIds: [],
-        }
-        const tree = Tree.fromDatum(node)
+        const tree = LineTree.newLine()
 
         return updateZipper(
           ifElse(

@@ -10,6 +10,8 @@ import {
   T,
 } from 'ramda'
 import * as Tree from './Tree'
+import nanoid from 'nanoid'
+import faker from 'faker'
 
 const root = {
   id: 'n_root',
@@ -85,4 +87,14 @@ export function visibleChildren(tree) {
 export function hasVisibleChildren(tree) {
   validate('O', arguments)
   return canCollapse(tree)
+}
+
+export function newLine() {
+  const line = {
+    id: `n_${nanoid()}`,
+    title: faker.name.lastName(),
+    collapsed: false,
+    childIds: [],
+  }
+  return Tree.fromDatum(line)
 }
