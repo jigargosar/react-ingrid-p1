@@ -4,6 +4,7 @@ import validate from 'aproba'
 import * as Zipper from './TreeZipper'
 import isHotKey from 'is-hotkey'
 import {
+  always,
   append,
   assoc,
   compose,
@@ -12,6 +13,8 @@ import {
   equals,
   identity,
   ifElse,
+  init,
+  last,
   lensPath,
   map,
   mergeDeepRight,
@@ -152,10 +155,13 @@ export function useAppModel() {
 
   const prevModelRef = useRef(model)
 
+  const [history, setHistory] = useState([])
+
   useEffect(() => {
     const prevModel = prevModelRef.current
     if (!equals(prevModel.zipper, model.zipper)) {
       console.log('zipper changed')
+      setHistory(append(model.zipper))
       prevModel.current = model
     }
   }, [model])
@@ -164,6 +170,14 @@ export function useAppModel() {
     setCache('app-model', model)
     window.m = model
   }, [model])
+
+  function undo() {
+    const lastHistoryItem = last(history)
+    if (lastHistoryItem) {
+      setModel(overZipper(always(lastHistoryItem)))
+      setHistory(init(history))
+    }
+  }
 
   useEffect(() => {
     function listener(e) {
@@ -181,6 +195,12 @@ export function useAppModel() {
         ['space', effects.startEditMode],
         ['enter', effects.newLineAndStartEditing],
         ['delete', effects.deleteLine],
+        [
+          'cmd+z',
+          () => {
+            undo()
+          },
+        ],
       ]
       const editModeKeyMap = [
         ['tab', effects.indent],
