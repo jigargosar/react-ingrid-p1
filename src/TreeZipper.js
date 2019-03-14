@@ -219,6 +219,11 @@ export function removeGoL(z) {
   return { ...z, left: init(z.left), center: last(z.left) }
 }
 
+export function removeGoR(z) {
+  if (isEmpty(z.right)) return null
+  return { ...z, center: head(z.right), right: tail(z.right) }
+}
+
 export function removeGoUp(z) {
   validate('O', arguments)
   if (isEmpty(z.crumbs)) {
@@ -235,6 +240,11 @@ export function removeGoUp(z) {
       crumbs: tail(z.crumbs),
     }
   }
+}
+
+export function removeGoROrLOrUp(z) {
+  validate('O', arguments)
+  return removeGoR(z) || removeGoL(z) || removeGoUp(z)
 }
 
 export function moveL(z) {

@@ -95,6 +95,12 @@ export function outdent(z) {
   return z
 }
 
+export function deleteLine(z) {
+  validate('O', arguments)
+
+  return Zipper.withRollback(Zipper.removeGoROrLOrUp)(z)
+}
+
 export function setTitle(newTitle) {
   return function(z) {
     return Zipper.mapDatum(assoc('title', newTitle))(z)

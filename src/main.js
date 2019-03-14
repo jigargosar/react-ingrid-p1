@@ -74,6 +74,9 @@ function useEffects(setModel) {
           ),
         )
       },
+      deleteLine: () => {
+        return updateZipper(LineZipper.deleteLine)
+      },
       startEditMode() {
         setModel(m => {
           const nm = assoc('editMode', true, m)
@@ -143,6 +146,7 @@ export function useAppModel() {
         ['cmd+down', effects.moveR],
         ['space', effects.startEditMode],
         ['enter', effects.newLine],
+        ['delete', effects.deleteLine],
       ]
       const editModeKeyMap = [
         ['tab', effects.indent],
