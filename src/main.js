@@ -12,7 +12,9 @@ import {
   head,
   identity,
   ifElse,
+  init,
   isEmpty,
+  last,
   lensPath,
   lensProp,
   map,
@@ -45,6 +47,11 @@ function canUndoZH(zh) {
   return !isEmpty(zh.right)
 }
 
+function canRedoZH(zh) {
+  ow(zh, zipperHistoryShape)
+  return !isEmpty(zh.left)
+}
+
 // function invariant(bool, msg = 'no msg provided') {
 //   if (!bool) {
 //     throw new Error(`Invariant failed: ${msg}`)
@@ -61,6 +68,19 @@ function undoZH(zh) {
     left: [...zh.left, zh.center],
     center: head(zh.right),
     right: tail(zh.right),
+  }
+  checkZipperHistory(retZH)
+  return retZH
+}
+
+function redoZH(zh) {
+  checkZipperHistory(zh)
+  ow(canRedoZH(zh), ow.boolean.true)
+
+  const retZH = {
+    left: init(zh.left),
+    center: last(zh.left),
+    right: [zh.center, ...zh.right],
   }
   checkZipperHistory(retZH)
   return retZH
@@ -159,6 +179,17 @@ function useEffects(setModelAndPushToHistory, setModel) {
           const zh = view(zipperHistoryL)(model)
           if (canUndoZH(zh)) {
             const newModel = overZHLens(undoZH)(model)
+
+            return { ...newModel, zipper: newModel.zipperHistory.center }
+          }
+          return model
+        })
+      },
+      redo() {
+        setModel(model => {
+          const zh = view(zipperHistoryL)(model)
+          if (canRedoZH(zh)) {
+            const newModel = overZHLens(redoZH)(model)
 
             return { ...newModel, zipper: newModel.zipperHistory.center }
           }
