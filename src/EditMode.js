@@ -1,8 +1,9 @@
-import { F, identity, T } from 'ramda'
+import { prop } from 'ramda'
 
-export const stopEditing = F
-export const startEditing = T
+export const stopEditing = () => ({ editing: false, isNew: null })
+export const startEditing = () => ({ editing: true, isNew: false })
+export const startEditingNew = () => ({ editing: true, isNew: true })
 
-export const isEditing = identity
+export const isEditing = prop('editing')
 
-export const initial = false
+export const initial = { editing: false, isNew: null }
