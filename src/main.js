@@ -103,7 +103,7 @@ function useEffects(setModelAndPushToHistory, setModel) {
       setModelAndPushToHistory(overZipper(uFn))
     }
 
-    const effects = {
+    return {
       next() {
         updateZipperAndPushToHistory(LineZipper.next)
       },
@@ -212,7 +212,6 @@ function useEffects(setModelAndPushToHistory, setModel) {
         )
       },
     }
-    return effects
   }, [setModelAndPushToHistory])
 }
 
