@@ -32,7 +32,7 @@ function TitleLine({
     if (el && isSelected && document.activeElement !== el) {
       el.focus()
       if (isEditingNew) {
-        console.log('called select all ;(', document.activeElement === el)
+        // console.log('called select all ;(', document.activeElement === el)
         el.select()
       }
     }
