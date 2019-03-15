@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { getCached, setCache } from './cache-helpers'
 import validate from 'aproba'
 import * as Zipper from './TreeZipper'
@@ -160,25 +160,26 @@ export function useAppModel() {
   useEffect(() => {
     const prevModel = prevModelRef.current
     if (!equals(prevModel.zipper, model.zipper)) {
-      console.log('zipper changed')
+      console.log(`history`, history)
+      // console.log('zipper changed', prevModel.zipper, model.zipper)
       setHistory(append(model.zipper))
       prevModel.current = model
     }
-  }, [model])
+  }, [model.zipper])
 
   useEffect(() => {
     setCache('app-model', model)
     window.m = model
   }, [model])
 
-  function undo() {
+  const undoCallback = useCallback(() => {
+    console.log(`undoCallback log history:`, history)
     const lastHistoryItem = last(history)
-    console.log(`history`, history)
     if (lastHistoryItem) {
       setModel(overZipper(always(lastHistoryItem)))
       setHistory(init(history))
     }
-  }
+  }, [history])
 
   useEffect(() => {
     function listener(e) {
@@ -196,12 +197,7 @@ export function useAppModel() {
         ['space', effects.startEditMode],
         ['enter', effects.newLineAndStartEditing],
         ['delete', effects.deleteLine],
-        [
-          'cmd+z',
-          () => {
-            undo()
-          },
-        ],
+        ['cmd+z', undoCallback],
       ]
       const editModeKeyMap = [
         ['tab', effects.indent],
@@ -217,7 +213,7 @@ export function useAppModel() {
 
     window.addEventListener('keydown', listener)
     return () => window.removeEventListener('keydown', listener)
-  }, [model.editMode])
+  }, [model.editMode, undoCallback])
 
   const effects = useEffects(setModel)
   return [model, effects]
