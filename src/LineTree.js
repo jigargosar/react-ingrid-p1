@@ -112,10 +112,10 @@ export function hasVisibleChildren(tree) {
   return canCollapse(tree)
 }
 
-export function newLine() {
+export function newLine(title = null) {
   const line = {
     id: `n_${nanoid()}`,
-    title: faker.name.lastName(),
+    title: title || faker.name.lastName(),
     collapsed: false,
   }
   return Tree.fromDatum(line)

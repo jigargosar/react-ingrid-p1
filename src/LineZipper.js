@@ -4,6 +4,7 @@ import { appendGoR } from './TreeZipper'
 import * as LineTree from './LineTree'
 import {
   assoc,
+  clamp,
   compose,
   isEmpty,
   pipe,
@@ -11,7 +12,9 @@ import {
   reject,
   split,
   trim,
+  until,
 } from 'ramda'
+import ow from 'ow'
 
 export const initial = Zipper.singleton(LineTree.initial)
 
@@ -171,6 +174,64 @@ function rejectBlankLines(list) {
   )(list)
 }
 
+function getDepth(ln) {
+  ow(ln, ow.string.nonEmpty)
+
+  const match = ln.match(/^\t*/)
+  if (match && match[0]) {
+    return match[0].split('\t').length
+  }
+  return 0
+}
+
+function createZipperFromIndentedLines([fst, rest]) {
+  ow(fst, ow.string.nonEmpty)
+
+  const initialAcc = {
+    z: Zipper.singleton(LineTree.newLine(fst)),
+    depth: 0,
+  }
+  return reduce(
+    (acc, ln) => {
+      const lnDepth = getDepth(ln)
+      const newLine = LineTree.newLine(ln.trimLeft())
+      if (lnDepth > acc.depth) {
+        return {
+          z: Zipper.appendChildGoR(newLine, acc.z),
+          depth: acc.depth + 1,
+        }
+      } else if (lnDepth === acc.depth) {
+        return {
+          z: Zipper.appendChildGoR(newLine, acc.z),
+          depth: acc.depth,
+        }
+      } else if (lnDepth < acc.depth) {
+        const nd = clamp(0, Math.MAX_SAFE_INTEGER, acc.depth - lnDepth)
+
+        return until(
+          acc => Zipper.isRoot(acc.z) || acc.depth === nd,
+          acc => {
+            return {
+              z: Zipper.withRollback(Zipper.parent),
+              depth: acc.depth - 1,
+            }
+          },
+          acc,
+        )
+
+        // const nz = compose(
+        //   Zipper.appendChildGoR(newLine),
+        //   reduce(Zipper.withRollback(Zipper.parent), acc.z),
+        // )(repeat(1, nd))
+        // return { z: nz, depth: nd }
+      }
+      return { z: acc.z, depth: lnDepth }
+    },
+    initialAcc,
+    rest,
+  )
+}
+
 export function breakIfMultiLine(z) {
   validate('O', arguments)
   if (isTitleBlank(z)) return z
@@ -182,6 +243,10 @@ export function breakIfMultiLine(z) {
   )(z)
 
   console.log(`lines`, lines)
+
+  const sz = createZipperFromIndentedLines(lines)
+  const pt = LineTree.toPlainText(Zipper.tree(sz))
+  console.log(`pt`, pt)
 
   return compose(
     nz => {

@@ -161,7 +161,7 @@ function useEffects(setModelAndPushToHistory, setModel) {
             return compose(
               overEditMode(EditMode.startEditingNew),
               newLine(),
-              overZipper(LineZipper.breakIfMultiLine),
+              // overZipper(LineZipper.breakIfMultiLine),
             )(m)
           }
         })
