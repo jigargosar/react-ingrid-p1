@@ -148,7 +148,7 @@ function useEffects(setModelAndPushToHistory, setModel) {
           if (emptyLeaf) {
             return compose(
               overZipper(LineZipper.deleteBlankTitleLeaf),
-              EditMode.stopEditMode,
+              overEditMode(EditMode.stopEditing),
             )(m)
           } else {
             return newLine()(m)
@@ -159,10 +159,10 @@ function useEffects(setModelAndPushToHistory, setModel) {
         updateZipperAndPushToHistory(LineZipper.deleteLine)
       },
       startEditMode() {
-        setModelAndPushToHistory(EditMode.startEditMode)
+        setModelAndPushToHistory(overEditMode(EditMode.startEditing))
       },
       stopEditMode() {
-        setModelAndPushToHistory(EditMode.stopEditMode)
+        setModelAndPushToHistory(overEditMode(EditMode.stopEditing))
       },
       onTitleChange(newTitle) {
         updateZipperAndPushToHistory(LineZipper.setTitle(newTitle))

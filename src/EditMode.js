@@ -1,4 +1,4 @@
-import { assoc } from 'ramda'
+import { F, T } from 'ramda'
 
-export const stopEditMode = assoc('editMode', false)
-export const startEditMode = assoc('editMode', true)
+export const stopEditing = F
+export const startEditing = T
