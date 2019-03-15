@@ -1,7 +1,17 @@
 import validate from 'aproba'
 import * as Zipper from './TreeZipper'
+import { appendGoR } from './TreeZipper'
 import * as LineTree from './LineTree'
-import { assoc, isEmpty, pipe, trim } from 'ramda'
+import {
+  assoc,
+  compose,
+  isEmpty,
+  pipe,
+  reduce,
+  reject,
+  split,
+  trim,
+} from 'ramda'
 
 export const initial = Zipper.singleton(LineTree.initial)
 
@@ -125,6 +135,7 @@ export function deleteLine(z) {
 }
 
 export function setTitle(newTitle) {
+  validate('S', arguments)
   return function(z) {
     return Zipper.mapDatum(assoc('title', newTitle))(z)
   }
@@ -140,4 +151,50 @@ export function moveR(z) {
   validate('O', arguments)
 
   return Zipper.withRollback(Zipper.moveR, z)
+}
+
+const withTree = fn =>
+  pipe(
+    Zipper.tree,
+    fn,
+  )
+
+const title = withTree(LineTree.title)
+
+function rejectBlankLines(list) {
+  validate('A', arguments)
+  return reject(
+    pipe(
+      trim,
+      isEmpty,
+    ),
+  )(list)
+}
+
+export function breakIfMultiLine(z) {
+  validate('O', arguments)
+  if (isTitleBlank(z)) return z
+
+  const [fst, ...lines] = compose(
+    rejectBlankLines,
+    split('\n'),
+    title,
+  )(z)
+
+  console.log(`lines`, lines)
+
+  return compose(
+    nz => {
+      return reduce(
+        (acc, ln) => {
+          const nAcc = setTitle(ln)(appendGoR(LineTree.newLine(), acc))
+
+          return nAcc
+        },
+        nz,
+        lines,
+      )
+    },
+    setTitle(fst),
+  )(z)
 }

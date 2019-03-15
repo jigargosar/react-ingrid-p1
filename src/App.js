@@ -24,6 +24,7 @@ function TitleLine({
   isEditing,
   isEditingNew,
   onTitleChange,
+  onPaste,
 }) {
   const titleRef = useRef()
   useLayoutEffect(() => {
@@ -67,6 +68,7 @@ function TitleLine({
             value={title}
             onChange={e => onTitleChange(e.target.value)}
             disabled={!isEditing}
+            onPaste={e => onPaste(e.clipboardData.getData('text/plain'))}
           />
         ) : (
           <div
@@ -106,6 +108,7 @@ function LineTreeView(props) {
             isEditing: isEditMode && selected,
             isEditingNew,
             onTitleChange: effects.onTitleChange,
+            onPaste: effects.onPaste,
           }}
         />
       </div>

@@ -150,9 +150,9 @@ function useEffects(setModelAndPushToHistory, setModel) {
       newLineOrDeleteEmptyLeaf() {
         setModelAndPushToHistory(m => {
           const zipper = m.zipper
-          const emptyLeaf = LineZipper.isBlankTitleLeaf(zipper)
+          const blankLeaf = LineZipper.isBlankTitleLeaf(zipper)
 
-          if (emptyLeaf) {
+          if (blankLeaf) {
             return compose(
               overZipper(LineZipper.deleteBlankTitleLeaf),
               overEditMode(EditMode.stopEditing),
@@ -161,6 +161,7 @@ function useEffects(setModelAndPushToHistory, setModel) {
             return compose(
               overEditMode(EditMode.startEditingNew),
               newLine(),
+              overZipper(LineZipper.breakIfMultiLine),
             )(m)
           }
         })
@@ -176,6 +177,20 @@ function useEffects(setModelAndPushToHistory, setModel) {
       },
       onTitleChange(newTitle) {
         updateZipperAndPushToHistory(LineZipper.setTitle(newTitle))
+      },
+      onPaste(pastedData) {
+        setModel(
+          tap(
+            pipe(
+              view(zipperL),
+              Zipper.tree,
+              tree => {
+                console.log(`LineTree.title(tree)`, LineTree.title(tree))
+                console.log(`pastedData`, pastedData)
+              },
+            ),
+          ),
+        )
       },
       undo() {
         setModel(model => {
