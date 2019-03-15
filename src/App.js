@@ -28,10 +28,12 @@ function TitleLine({
   const titleRef = useRef()
   useLayoutEffect(() => {
     const el = titleRef.current
-    if (el && isSelected) {
+
+    if (el && isSelected && document.activeElement !== el) {
       el.focus()
       if (isEditingNew) {
-        console.log(`el.selectAll`, el.selectAll)
+        console.log('called select all ;(', document.activeElement === el)
+        el.select()
       }
     }
   }, [isSelected, isEditing, titleRef.current, isEditingNew])
