@@ -1,5 +1,10 @@
 import React, { useLayoutEffect, useRef } from 'react'
-import { getIsEditMode, getSelectedId, useAppModel } from './main'
+import {
+  getIsEditingNew,
+  getIsEditMode,
+  getSelectedId,
+  useAppModel,
+} from './main'
 import * as Zipper from './TreeZipper'
 import * as LineTree from './LineTree'
 
@@ -12,14 +17,24 @@ function IconContainer(props) {
   )
 }
 
-function TitleLine({ title, icon, isSelected, isEditing, onTitleChange }) {
+function TitleLine({
+  title,
+  icon,
+  isSelected,
+  isEditing,
+  isEditingNew,
+  onTitleChange,
+}) {
   const titleRef = useRef()
   useLayoutEffect(() => {
     const el = titleRef.current
     if (el && isSelected) {
       el.focus()
+      if (isEditingNew) {
+        console.log(`el.selectAll`, el.selectAll)
+      }
     }
-  }, [isSelected, isEditing, titleRef.current])
+  }, [isSelected, isEditing, titleRef.current, isEditingNew])
 
   function resizeHeight() {
     const el = titleRef.current
@@ -66,7 +81,14 @@ function TitleLine({ title, icon, isSelected, isEditing, onTitleChange }) {
 }
 
 function LineTreeView(props) {
-  const { level, tree, selectedId, isEditMode, effects } = props
+  const {
+    level,
+    tree,
+    selectedId,
+    isEditMode,
+    effects,
+    isEditingNew,
+  } = props
   const selected = LineTree.idEq(selectedId, tree)
   return (
     <>
@@ -80,6 +102,7 @@ function LineTreeView(props) {
             title: LineTree.title(tree),
             isSelected: selected,
             isEditing: isEditMode && selected,
+            isEditingNew,
             onTitleChange: effects.onTitleChange,
           }}
         />
@@ -102,6 +125,7 @@ function App() {
   const [model, effects] = useAppModel()
 
   const isEditMode = getIsEditMode(model)
+  const isEditingNew = getIsEditingNew(model)
   return (
     <div className={`min-vh-100 ${isEditMode ? 'bg-black-20' : ''}`}>
       {/*<RootTree model={model} effects={effects} />*/}
@@ -111,6 +135,7 @@ function App() {
           tree: Zipper.rootTree(model.zipper),
           selectedId: getSelectedId(model),
           isEditMode,
+          isEditingNew,
           effects,
         }}
       />

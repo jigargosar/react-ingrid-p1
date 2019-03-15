@@ -215,6 +215,14 @@ export function getIsEditMode(model) {
   )(model)
 }
 
+export function getIsEditingNew(model) {
+  validate('O', arguments)
+  return compose(
+    EditMode.isEditingNew,
+    viewEditMode,
+  )(model)
+}
+
 function useCachedModel() {
   const [model, setModel] = useState(() => {
     const def = {
