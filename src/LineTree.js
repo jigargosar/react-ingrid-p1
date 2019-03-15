@@ -140,3 +140,31 @@ function toPlainTextWithLevel(level, tree) {
 
   return join('\n')([titleLine, ...childLines])
 }
+
+/*
+ main.js:265
+
+Root
+
+	Inbasket
+
+	JJ
+
+	Brekke
+
+		Hermiston
+
+		West
+
+	MacGyver
+
+		Mitchell
+
+		Mueller
+
+		Huel
+
+		Pfannerstill
+
+
+*/
