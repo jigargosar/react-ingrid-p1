@@ -45,6 +45,7 @@ function invariant(bool, msg = 'no msg provided') {
 function undoZH(zh) {
   validate('O', arguments)
   invariant(canUndoZH(zh))
+
   return !isEmpty(zh.right)
 }
 
