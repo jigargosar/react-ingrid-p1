@@ -138,8 +138,12 @@ function useEffects(setModelAndPushToHistory, setModel) {
         setModelAndPushToHistory(newLine())
       },
       newLineAndStartEditing() {
-        effects.newLine()
-        effects.startEditMode()
+        setModelAndPushToHistory(
+          compose(
+            overEditMode(EditMode.startEditingNew),
+            newLine(),
+          ),
+        )
       },
       newLineOrDeleteEmptyLeaf() {
         setModelAndPushToHistory(m => {
@@ -152,7 +156,10 @@ function useEffects(setModelAndPushToHistory, setModel) {
               overEditMode(EditMode.stopEditing),
             )(m)
           } else {
-            return newLine()(m)
+            return compose(
+              overEditMode(EditMode.startEditingNew),
+              newLine(),
+            )(m)
           }
         })
       },
