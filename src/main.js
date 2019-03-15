@@ -280,74 +280,10 @@ export function useAppModel() {
     })
   }
 
-  // useEffect(() => {
-  //   setModel(oldModel => {
-  //     const oldHistory = oldModel.zipperHistory
-  //     if (notEquals(oldModel.zipper, oldHistory.center)) {
-  //       return {
-  //         ...oldModel,
-  //         zipperHistory: {
-  //           left: [],
-  //           center: oldModel.zipper,
-  //           right: [oldHistory.center, ...oldHistory.right],
-  //         },
-  //       }
-  //     }
-  //
-  //     return oldModel
-  //   })
-  // }, [model.zipper])
-
-  // const [, setZipperHistory] = useState([])
-
-  // function setModelWithoutHistory(fn) {
-  //   validate('F', arguments)
-  //   setModel(fn)
-  // }
-  //
-  // function setModelAndPushToHistory(fn) {
-  //   validate('F', arguments)
-  //   setModel(oldModel=>{
-  //     const newModel = fn(oldModel)
-  //
-  //
-  //     if(notEquals(oldModel.zipper, newModel.zipper)){
-  //       setZipperHistory(append(newModel.zipper))
-  //     }
-  //
-  //     return newModel
-  //   })
-  // }
-
-  // const prevModelRef = useRef(model)
-  // useEffect(() => {
-  //   const prevModel = prevModelRef.current
-  //   if (!equals(prevModel.zipper, model.zipper)) {
-  //     console.log(`zipperHistory`, zipperHistory)
-  //     // console.log('zipper changed', prevModel.zipper, model.zipper)
-  //     setZipperHistory(append(model.zipper))
-  //     prevModel.current = model
-  //   }
-  // }, [model.zipper])
-
   useEffect(() => {
     setCache('app-model', model)
     window.m = model
   }, [model])
-
-  // function undoHistory() {
-  //   debugger
-  //   setZipperHistory(history => {
-  //     debugger
-  //     console.log(`history`, history)
-  //     const lastHistoryItem = last(history)
-  //     if (lastHistoryItem) {
-  //       setModelWithoutHistory(overZipper(always(lastHistoryItem)))
-  //       return init(history)
-  //     }
-  //     return history
-  //   })
-  // }
 
   useEffect(() => {
     function listener(e) {
