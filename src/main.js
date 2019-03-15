@@ -57,12 +57,13 @@ function undoZH(zh) {
   checkZipperHistory(zh)
   ow(canUndoZH(zh), ow.boolean.true)
 
-  return {
-    ...zh,
+  const retZH = {
     left: [...zh.left, zh.center],
     center: head(zh.right),
     right: tail(zh.right),
   }
+  checkZipperHistory(retZH)
+  return retZH
 }
 
 const stopEditMode = assoc('editMode', false)
@@ -159,7 +160,7 @@ function useEffects(setModelAndPushToHistory, setModel) {
           if (canUndoZH(zh)) {
             const newModel = overZHLens(undoZH)(model)
 
-            return { ...newModel, zipper: newModel.zipperHistory.current }
+            return { ...newModel, zipper: newModel.zipperHistory.center }
           }
           return model
         })
@@ -207,7 +208,10 @@ function useCachedModel() {
       const retM = fn(m)
       ow(
         retM,
-        ow.object.partialShape({ zipperHistory: zipperHistoryShape }),
+        ow.object.partialShape({
+          zipperHistory: zipperHistoryShape,
+          zipper: ow.object.nonEmpty,
+        }),
       )
       return retM
     })
