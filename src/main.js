@@ -366,6 +366,7 @@ export function useAppModel() {
         ['enter', effects.newLineAndStartEditing],
         ['delete', effects.deleteLine],
         ['cmd+z', effects.undo],
+        ['cmd+shift+z', effects.redo],
       ]
       const editModeKeyMap = [
         ['tab', effects.indent],
