@@ -5,7 +5,6 @@ import * as Zipper from './TreeZipper'
 import isHotKey from 'is-hotkey'
 import {
   append,
-  assoc,
   compose,
   cond,
   defaultTo,
@@ -29,6 +28,10 @@ import * as LineZipper from './LineZipper'
 import * as LineTree from './LineTree'
 import { notEquals } from './ramda-helpers'
 import ow from 'ow'
+import * as EditMode from './EditMode'
+
+const editModeL = lensPath(['editMode'])
+const overEditMode = over(editModeL)
 
 const zipperL = lensPath(['zipper'])
 const overZipper = over(zipperL)
@@ -80,8 +83,6 @@ function redoZH(zh) {
   return retZH
 }
 
-const stopEditMode = assoc('editMode', false)
-
 function newLine() {
   const tree = LineTree.newLine()
   return overZipper(
@@ -92,8 +93,6 @@ function newLine() {
     ),
   )
 }
-
-const startEditMode = assoc('editMode', true)
 
 function useEffects(setModelAndPushToHistory, setModel) {
   return useMemo(() => {
@@ -149,7 +148,7 @@ function useEffects(setModelAndPushToHistory, setModel) {
           if (emptyLeaf) {
             return compose(
               overZipper(LineZipper.deleteBlankTitleLeaf),
-              stopEditMode,
+              EditMode.stopEditMode,
             )(m)
           } else {
             return newLine()(m)
@@ -160,10 +159,10 @@ function useEffects(setModelAndPushToHistory, setModel) {
         updateZipperAndPushToHistory(LineZipper.deleteLine)
       },
       startEditMode() {
-        setModelAndPushToHistory(startEditMode)
+        setModelAndPushToHistory(EditMode.startEditMode)
       },
       stopEditMode() {
-        setModelAndPushToHistory(stopEditMode)
+        setModelAndPushToHistory(EditMode.stopEditMode)
       },
       onTitleChange(newTitle) {
         updateZipperAndPushToHistory(LineZipper.setTitle(newTitle))
