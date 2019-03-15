@@ -9,6 +9,7 @@ import {
   compose,
   cond,
   defaultTo,
+  head,
   identity,
   ifElse,
   isEmpty,
@@ -19,7 +20,8 @@ import {
   over,
   prop,
   T,
-  when,
+  tail,
+  view,
 } from 'ramda'
 import * as LineZipper from './LineZipper'
 import * as LineTree from './LineTree'
@@ -49,11 +51,18 @@ function canUndoZH(zh) {
 //   }
 // }
 
+const checkZipperHistory = ow.create('ZipperHistory', zipperHistoryShape)
+
 function undoZH(zh) {
-  ow(zh, zipperHistoryShape)
+  checkZipperHistory(zh)
   ow(canUndoZH(zh), ow.boolean.true)
 
-  return !isEmpty(zh.right)
+  return {
+    ...zh,
+    left: [...zh.left, zh.center],
+    center: head(zh.right),
+    right: tail(zh.right),
+  }
 }
 
 const stopEditMode = assoc('editMode', false)
@@ -146,7 +155,13 @@ function useEffects(setModelAndPushToHistory, setModel) {
       },
       undo() {
         setModel(model => {
-          return overZHLens(when(canUndoZH, undoZH))(model)
+          const zh = view(zipperHistoryL)(model)
+          if (canUndoZH(zh)) {
+            const newModel = overZHLens(undoZH)(model)
+
+            return { ...newModel, zipper: newModel.zipperHistory.current }
+          }
+          return model
         })
       },
     }
