@@ -32,6 +32,7 @@ import * as EditMode from './EditMode'
 
 const editModeL = lensPath(['editMode'])
 const overEditMode = over(editModeL)
+const viewEditMode = view(editModeL)
 
 const zipperL = lensPath(['zipper'])
 const overZipper = over(zipperL)
@@ -208,14 +209,17 @@ const createHotKeyHandler = compose(
 
 export function getIsEditMode(model) {
   validate('O', arguments)
-  return model.editMode
+  return compose(
+    EditMode.isEditing,
+    viewEditMode,
+  )(model)
 }
 
 function useCachedModel() {
   const [model, setModel] = useState(() => {
     const def = {
       zipper: LineZipper.initial,
-      editMode: false,
+      editMode: EditMode.initial,
       zipperHistory: { left: [], center: LineZipper.initial, right: [] },
     }
 
@@ -305,13 +309,13 @@ export function useAppModel() {
       ]
 
       createHotKeyHandler(
-        model.editMode ? editModeKeyMap : normalModeKeyMap,
+        getIsEditMode(model) ? editModeKeyMap : normalModeKeyMap,
       )(e)
     }
 
     window.addEventListener('keydown', listener)
     return () => window.removeEventListener('keydown', listener)
-  }, [model.editMode])
+  }, [viewEditMode(model)])
 
   const effects = useEffects(setModelAndPushToHistory, setModel)
   return [model, effects]
