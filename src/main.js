@@ -52,12 +52,6 @@ function canRedoZH(zh) {
   return !isEmpty(zh.left)
 }
 
-// function invariant(bool, msg = 'no msg provided') {
-//   if (!bool) {
-//     throw new Error(`Invariant failed: ${msg}`)
-//   }
-// }
-
 const checkZipperHistory = ow.create('ZipperHistory', zipperHistoryShape)
 
 function undoZH(zh) {
