@@ -11,12 +11,15 @@ import {
   defaultTo,
   identity,
   ifElse,
+  isEmpty,
   lensPath,
+  lensProp,
   map,
   mergeDeepRight,
   over,
   prop,
   T,
+  when,
 } from 'ramda'
 import * as LineZipper from './LineZipper'
 import * as LineTree from './LineTree'
@@ -24,6 +27,26 @@ import { notEquals } from './ramda-helpers'
 
 const zipperL = lensPath(['zipper'])
 const overZipper = over(zipperL)
+
+const zipperHistoryL = lensProp('zipperHistory')
+const overZHLens = over(zipperHistoryL)
+
+function canUndoZH(zh) {
+  validate('O', arguments)
+  return !isEmpty(zh.right)
+}
+
+function invariant(bool, msg = 'no msg provided') {
+  if (!bool) {
+    throw new Error(`Invariant failed: ${msg}`)
+  }
+}
+
+function undoZH(zh) {
+  validate('O', arguments)
+  invariant(canUndoZH(zh))
+  return !isEmpty(zh.right)
+}
 
 const stopEditMode = assoc('editMode', false)
 
@@ -40,21 +63,21 @@ function newLine() {
 
 const startEditMode = assoc('editMode', true)
 
-function useEffects(setModel) {
+function useEffects(setModelAndPushToHistory, setModel) {
   return useMemo(() => {
-    function updateZipper(uFn) {
-      setModel(overZipper(uFn))
+    function updateZipperAndPushToHistory(uFn) {
+      setModelAndPushToHistory(overZipper(uFn))
     }
 
     const effects = {
       next() {
-        updateZipper(LineZipper.next)
+        updateZipperAndPushToHistory(LineZipper.next)
       },
       prev() {
-        updateZipper(LineZipper.prev)
+        updateZipperAndPushToHistory(LineZipper.prev)
       },
       collapseOrParent() {
-        updateZipper(
+        updateZipperAndPushToHistory(
           ifElse(
             LineZipper.canCollapse,
             LineZipper.collapse,
@@ -63,31 +86,31 @@ function useEffects(setModel) {
         )
       },
       expandOrNext() {
-        updateZipper(
+        updateZipperAndPushToHistory(
           ifElse(LineZipper.canExpand, LineZipper.expand, LineZipper.next),
         )
       },
       moveL() {
-        updateZipper(LineZipper.moveL)
+        updateZipperAndPushToHistory(LineZipper.moveL)
       },
       moveR() {
-        updateZipper(LineZipper.moveR)
+        updateZipperAndPushToHistory(LineZipper.moveR)
       },
       indent() {
-        updateZipper(LineZipper.indent)
+        updateZipperAndPushToHistory(LineZipper.indent)
       },
       outdent() {
-        updateZipper(LineZipper.outdent)
+        updateZipperAndPushToHistory(LineZipper.outdent)
       },
       newLine: () => {
-        setModel(newLine())
+        setModelAndPushToHistory(newLine())
       },
       newLineAndStartEditing() {
         effects.newLine()
         effects.startEditMode()
       },
       newLineOrDeleteEmptyLeaf() {
-        setModel(m => {
+        setModelAndPushToHistory(m => {
           const zipper = m.zipper
           const emptyLeaf = LineZipper.isBlankTitleLeaf(zipper)
 
@@ -102,20 +125,25 @@ function useEffects(setModel) {
         })
       },
       deleteLine: () => {
-        updateZipper(LineZipper.deleteLine)
+        updateZipperAndPushToHistory(LineZipper.deleteLine)
       },
       startEditMode() {
-        setModel(startEditMode)
+        setModelAndPushToHistory(startEditMode)
       },
       stopEditMode() {
-        setModel(stopEditMode)
+        setModelAndPushToHistory(stopEditMode)
       },
       onTitleChange(newTitle) {
-        updateZipper(LineZipper.setTitle(newTitle))
+        updateZipperAndPushToHistory(LineZipper.setTitle(newTitle))
+      },
+      undo() {
+        setModel(model => {
+          return overZHLens(when(canUndoZH, undoZH))(model)
+        })
       },
     }
     return effects
-  }, [setModel])
+  }, [setModelAndPushToHistory])
 }
 
 const createHotKeyHandler = compose(
@@ -151,23 +179,49 @@ export function useAppModel() {
     )('app-model')
   })
 
-  useEffect(() => {
+  function setModelAndPushToHistory(fn) {
+    validate('F', arguments)
     setModel(oldModel => {
-      const oldHistory = oldModel.zipperHistory
-      if (notEquals(oldModel.zipper, oldHistory.center)) {
+      const newModel = fn(oldModel)
+
+      console.assert(oldModel.zipperHistory === newModel.zipperHistory)
+
+      const zipperHistory = oldModel.zipperHistory
+      const oldZipper = oldModel.zipperHistory.center
+
+      const newZipper = newModel.zipper
+      if (notEquals(newZipper, oldZipper)) {
         return {
-          ...oldModel,
+          ...newModel,
           zipperHistory: {
             left: [],
-            center: oldModel.zipper,
-            right: [oldHistory.center, ...oldHistory.right],
+            center: newZipper,
+            right: [oldZipper, ...zipperHistory.right],
           },
         }
       }
 
-      return oldModel
+      return newModel
     })
-  }, [model.zipper])
+  }
+
+  // useEffect(() => {
+  //   setModel(oldModel => {
+  //     const oldHistory = oldModel.zipperHistory
+  //     if (notEquals(oldModel.zipper, oldHistory.center)) {
+  //       return {
+  //         ...oldModel,
+  //         zipperHistory: {
+  //           left: [],
+  //           center: oldModel.zipper,
+  //           right: [oldHistory.center, ...oldHistory.right],
+  //         },
+  //       }
+  //     }
+  //
+  //     return oldModel
+  //   })
+  // }, [model.zipper])
 
   // const [, setZipperHistory] = useState([])
 
@@ -176,7 +230,7 @@ export function useAppModel() {
   //   setModel(fn)
   // }
   //
-  // function setModelWithHistory(fn) {
+  // function setModelAndPushToHistory(fn) {
   //   validate('F', arguments)
   //   setModel(oldModel=>{
   //     const newModel = fn(oldModel)
@@ -221,7 +275,6 @@ export function useAppModel() {
   // }
 
   useEffect(() => {
-    debugger
     function listener(e) {
       validate('O', arguments)
       // console.log(`e`, e)
@@ -255,7 +308,7 @@ export function useAppModel() {
     return () => window.removeEventListener('keydown', listener)
   }, [model.editMode])
 
-  const effects = useEffects(setModel)
+  const effects = useEffects(setModelAndPushToHistory, setModel)
   return [model, effects]
 }
 
