@@ -1,20 +1,16 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { getCached, setCache } from './cache-helpers'
 import validate from 'aproba'
 import * as Zipper from './TreeZipper'
 import isHotKey from 'is-hotkey'
 import {
-  always,
   append,
   assoc,
   compose,
   cond,
   defaultTo,
-  equals,
   identity,
   ifElse,
-  init,
-  last,
   lensPath,
   map,
   mergeDeepRight,
@@ -24,6 +20,7 @@ import {
 } from 'ramda'
 import * as LineZipper from './LineZipper'
 import * as LineTree from './LineTree'
+import { notEquals } from './ramda-helpers'
 
 const zipperL = lensPath(['zipper'])
 const overZipper = over(zipperL)
@@ -143,6 +140,7 @@ export function useAppModel() {
     const def = {
       zipper: LineZipper.initial,
       editMode: false,
+      zipperHistory: { left: [], center: LineZipper.initial, right: [] },
     }
 
     return compose(
@@ -153,35 +151,77 @@ export function useAppModel() {
     )('app-model')
   })
 
-  const prevModelRef = useRef(model)
-
-  const [history, setHistory] = useState([])
-
   useEffect(() => {
-    const prevModel = prevModelRef.current
-    if (!equals(prevModel.zipper, model.zipper)) {
-      console.log(`history`, history)
-      // console.log('zipper changed', prevModel.zipper, model.zipper)
-      setHistory(append(model.zipper))
-      prevModel.current = model
-    }
+    setModel(oldModel => {
+      const oldHistory = oldModel.zipperHistory
+      if (notEquals(oldModel.zipper, oldHistory.center)) {
+        return {
+          ...oldModel,
+          zipperHistory: {
+            left: [],
+            center: oldModel.zipper,
+            right: [oldHistory.center, ...oldHistory.right],
+          },
+        }
+      }
+
+      return oldModel
+    })
   }, [model.zipper])
+
+  // const [, setZipperHistory] = useState([])
+
+  // function setModelWithoutHistory(fn) {
+  //   validate('F', arguments)
+  //   setModel(fn)
+  // }
+  //
+  // function setModelWithHistory(fn) {
+  //   validate('F', arguments)
+  //   setModel(oldModel=>{
+  //     const newModel = fn(oldModel)
+  //
+  //
+  //     if(notEquals(oldModel.zipper, newModel.zipper)){
+  //       setZipperHistory(append(newModel.zipper))
+  //     }
+  //
+  //     return newModel
+  //   })
+  // }
+
+  // const prevModelRef = useRef(model)
+  // useEffect(() => {
+  //   const prevModel = prevModelRef.current
+  //   if (!equals(prevModel.zipper, model.zipper)) {
+  //     console.log(`zipperHistory`, zipperHistory)
+  //     // console.log('zipper changed', prevModel.zipper, model.zipper)
+  //     setZipperHistory(append(model.zipper))
+  //     prevModel.current = model
+  //   }
+  // }, [model.zipper])
 
   useEffect(() => {
     setCache('app-model', model)
     window.m = model
   }, [model])
 
-  const undoCallback = useCallback(() => {
-    console.log(`undoCallback log history:`, history)
-    const lastHistoryItem = last(history)
-    if (lastHistoryItem) {
-      setModel(overZipper(always(lastHistoryItem)))
-      setHistory(init(history))
-    }
-  }, [history])
+  // function undoHistory() {
+  //   debugger
+  //   setZipperHistory(history => {
+  //     debugger
+  //     console.log(`history`, history)
+  //     const lastHistoryItem = last(history)
+  //     if (lastHistoryItem) {
+  //       setModelWithoutHistory(overZipper(always(lastHistoryItem)))
+  //       return init(history)
+  //     }
+  //     return history
+  //   })
+  // }
 
   useEffect(() => {
+    debugger
     function listener(e) {
       validate('O', arguments)
       // console.log(`e`, e)
@@ -197,7 +237,7 @@ export function useAppModel() {
         ['space', effects.startEditMode],
         ['enter', effects.newLineAndStartEditing],
         ['delete', effects.deleteLine],
-        ['cmd+z', undoCallback],
+        // ['cmd+z', undoHistory],
       ]
       const editModeKeyMap = [
         ['tab', effects.indent],
@@ -213,7 +253,7 @@ export function useAppModel() {
 
     window.addEventListener('keydown', listener)
     return () => window.removeEventListener('keydown', listener)
-  }, [model.editMode, undoCallback])
+  }, [model.editMode])
 
   const effects = useEffects(setModel)
   return [model, effects]
