@@ -171,7 +171,7 @@ export function getIsEditMode(model) {
   return model.editMode
 }
 
-export function useAppModel() {
+function useCachedModel() {
   const [model, setModel] = useState(() => {
     const def = {
       zipper: LineZipper.initial,
@@ -186,6 +186,23 @@ export function useAppModel() {
       getCached,
     )('app-model')
   })
+
+  function setAndValidateModel(fn) {
+    setModel(m => {
+      const retM = fn(m)
+      ow(
+        retM,
+        ow.object.partialShape({ zipperHistory: zipperHistoryShape }),
+      )
+      return retM
+    })
+  }
+
+  return [model, setAndValidateModel]
+}
+
+export function useAppModel() {
+  const [model, setModel] = useCachedModel()
 
   function setModelAndPushToHistory(fn) {
     validate('F', arguments)
