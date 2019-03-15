@@ -24,6 +24,7 @@ import {
 import * as LineZipper from './LineZipper'
 import * as LineTree from './LineTree'
 import { notEquals } from './ramda-helpers'
+import ow from 'ow'
 
 const zipperL = lensPath(['zipper'])
 const overZipper = over(zipperL)
@@ -31,20 +32,26 @@ const overZipper = over(zipperL)
 const zipperHistoryL = lensProp('zipperHistory')
 const overZHLens = over(zipperHistoryL)
 
+const zipperHistoryShape = ow.object.exactShape({
+  left: ow.array,
+  center: ow.object,
+  right: ow.array,
+})
+
 function canUndoZH(zh) {
-  validate('O', arguments)
+  ow(zh, zipperHistoryShape)
   return !isEmpty(zh.right)
 }
 
-function invariant(bool, msg = 'no msg provided') {
-  if (!bool) {
-    throw new Error(`Invariant failed: ${msg}`)
-  }
-}
+// function invariant(bool, msg = 'no msg provided') {
+//   if (!bool) {
+//     throw new Error(`Invariant failed: ${msg}`)
+//   }
+// }
 
 function undoZH(zh) {
-  validate('O', arguments)
-  invariant(canUndoZH(zh))
+  ow(zh, zipperHistoryShape)
+  ow(canUndoZH(zh), ow.boolean.true)
 
   return !isEmpty(zh.right)
 }
@@ -291,7 +298,7 @@ export function useAppModel() {
         ['space', effects.startEditMode],
         ['enter', effects.newLineAndStartEditing],
         ['delete', effects.deleteLine],
-        // ['cmd+z', undoHistory],
+        ['cmd+z', effects.undo],
       ]
       const editModeKeyMap = [
         ['tab', effects.indent],
