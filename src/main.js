@@ -19,9 +19,11 @@ import {
   map,
   mergeDeepRight,
   over,
+  pipe,
   prop,
   T,
   tail,
+  tap,
   view,
 } from 'ramda'
 import * as LineZipper from './LineZipper'
@@ -197,6 +199,18 @@ function useEffects(setModelAndPushToHistory, setModel) {
           return model
         })
       },
+      copy() {
+        setModel(
+          tap(
+            pipe(
+              view(zipperL),
+              Zipper.tree,
+              LineTree.toPlainText,
+              console.log,
+            ),
+          ),
+        )
+      },
     }
     return effects
   }, [setModelAndPushToHistory])
@@ -315,6 +329,7 @@ export function useAppModel() {
         ['delete', effects.deleteLine],
         ['cmd+z', effects.undo],
         ['cmd+shift+z', effects.redo],
+        ['cmd+c', effects.copy],
       ]
       const editModeKeyMap = [
         ['tab', effects.indent],

@@ -1,13 +1,20 @@
 import validate from 'aproba'
 import {
+  __,
   always,
   assoc,
   both,
   complement,
+  compose,
+  concat,
   cond,
+  flatten,
+  join,
+  map,
   pipe,
   prop,
   propOr,
+  repeat,
   T,
 } from 'ramda'
 import * as Tree from './Tree'
@@ -112,4 +119,24 @@ export function newLine() {
     collapsed: false,
   }
   return Tree.fromDatum(line)
+}
+
+export function toPlainText(tree) {
+  return toPlainTextWithLevel(0, tree)
+}
+
+function toPlainTextWithLevel(level, tree) {
+  const titleLine = compose(
+    concat(__, '\n'),
+    concat(join('')(repeat('\t', level))),
+    title,
+  )(tree)
+
+  const childLines = compose(
+    flatten,
+    map(c => toPlainTextWithLevel(level + 1, c)),
+    Tree.children,
+  )(tree)
+
+  return join('\n')([titleLine, ...childLines])
 }
